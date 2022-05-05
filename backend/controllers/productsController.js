@@ -10,7 +10,7 @@ export const getProducts = asyncHandler(async (req, res, next) => {
     res.status(404);
     throw new Error("Product not found");
   }
-  res.status(200).json({ success: true, data: products });
+  res.status(200).json({ success: true, products });
 });
 
 // @desc    Get single product
@@ -23,5 +23,5 @@ export const getProduct = asyncHandler(async (req, res, next) => {
     res.status(404).json({ msg: "Product not found" });
   }
 
-  res.status(200).json({ success: true, data: product });
+  res.status(200).json({ success: true, product });
 });
