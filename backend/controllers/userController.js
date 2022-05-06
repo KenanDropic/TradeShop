@@ -1,15 +1,26 @@
 import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnAuthenticatedError,
+} from "../utils/errorResponse.js";
 
-// @desc    Create User
+// @desc    Register User
 // @route   POST /api/v1/auth/register
 // @access  Public
 export const registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
 
+  if (!name || !email || !password) {
+    return next(new BadRequestError("Please provide all values"), 400);
+  }
+
   const user = await User.create(req.body);
 
-  res.status(200).json({ success: true });
+  const token = user.getSignedJWT();
+
+  res.status(200).json({ success: true, token });
 });
 
 // @desc    Login User
@@ -19,8 +30,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    res.status(404);
-    throw new Error("Please provide all values");
+    return next(new BadRequestError("Please provide all values"));
   }
 
   const user = await User.findOne({ email }).select("+password");
@@ -33,8 +43,9 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   const doesMatch = await user.matchPasswords(password);
 
   if (!doesMatch) {
-    res.status(401);
-    throw new Error("Invalid credentials");
+    return next(
+      new UnAuthenticatedError("Not authorized to access this route")
+    );
   }
 
   const token = user.getSignedJWT();
@@ -49,8 +60,7 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
   const currentUser = await User.findById(req.user.id);
 
   if (!currentUser) {
-    res.status(404);
-    throw new Error("User not found");
+    return next(new NotFoundError("User not found"));
   }
 
   // removing __v property
@@ -63,3 +73,5 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, user: currentUserCopy });
 });
+
+const sendTokenResponse = (user, statusCode, response) => {};

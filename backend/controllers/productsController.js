@@ -1,5 +1,6 @@
 import Product from "../models/Product.js";
 import asyncHandler from "express-async-handler";
+import { NotFoundError } from "../utils/errorResponse.js";
 
 // @desc    Get all products
 // @route   GET /api/v1/products
@@ -7,8 +8,7 @@ import asyncHandler from "express-async-handler";
 export const getProducts = asyncHandler(async (req, res, next) => {
   const products = await Product.find({});
   if (!products) {
-    res.status(404);
-    throw new Error("Product not found");
+    return next(new NotFoundError("Product not found"));
   }
   res.status(200).json({ success: true, products });
 });
@@ -20,7 +20,7 @@ export const getProduct = asyncHandler(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
 
   if (!product) {
-    res.status(404).json({ msg: "Product not found" });
+    return next(new NotFoundError("Product not found"));
   }
 
   res.status(200).json({ success: true, product });
