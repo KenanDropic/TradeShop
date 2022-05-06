@@ -37,12 +37,29 @@ export const loginUser = asyncHandler(async (req, res, next) => {
     throw new Error("Invalid credentials");
   }
 
-  res.status(200).json({ success: true });
+  const token = user.getSignedJWT();
+
+  res.status(200).json({ success: true, token });
 });
 
 // @desc    Get current user
-// @route   POST /api/v1/auth/current
-// @access  Public
+// @route   GET /api/v1/auth/profile
+// @access  Private
 export const getLoggedUser = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ success: true });
+  const currentUser = await User.findById(req.user.id);
+
+  if (!currentUser) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  // removing __v property
+  const currentUserCopy = {
+    _id: currentUser._id,
+    name: currentUser.name,
+    email: currentUser.email,
+    isAdmin: currentUser.isAdmin,
+  };
+
+  res.status(200).json({ success: true, user: currentUserCopy });
 });
