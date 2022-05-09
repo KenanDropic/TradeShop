@@ -69,6 +69,19 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, user: currentUserCopy });
 });
 
+// @desc    Logout user
+// @route   GET /api/v1/auth/logout
+// @access  Private
+export const logoutUser = asyncHandler(async (req, res, next) => {
+  const currentUser = await User.findById(req.user.id);
+
+  if (!currentUser) {
+    return next(new NotFoundError("User not found"));
+  }
+
+  res.status(200).json({ success: true, user: currentUserCopy });
+});
+
 // send token as response
 const sendTokenResponse = (user, statusCode, response) => {
   const token = user.getSignedJWT();
