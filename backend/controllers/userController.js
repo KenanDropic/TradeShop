@@ -18,9 +18,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 
   const user = await User.create(req.body);
 
-  const token = user.getSignedJWT();
-
-  res.status(200).json({ success: true, token });
+  sendTokenResponse(user, 201, res);
 });
 
 // @desc    Login User
@@ -36,8 +34,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    res.status(404);
-    throw new Error("User not found");
+    return next(new NotFoundError("User not found"));
   }
 
   const doesMatch = await user.matchPasswords(password);
@@ -48,9 +45,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const token = user.getSignedJWT();
-
-  res.status(200).json({ success: true, token });
+  sendTokenResponse(user, 200, res);
 });
 
 // @desc    Get current user
@@ -74,4 +69,9 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, user: currentUserCopy });
 });
 
-const sendTokenResponse = (user, statusCode, response) => {};
+// send token as response
+const sendTokenResponse = (user, statusCode, response) => {
+  const token = user.getSignedJWT();
+
+  response.status(statusCode).json({ success: true, token });
+};
