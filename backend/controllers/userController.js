@@ -16,6 +16,12 @@ export const registerUser = asyncHandler(async (req, res, next) => {
     return next(new BadRequestError("Please provide all values"), 400);
   }
 
+  const doesUserExist = await User.findOne({ email });
+
+  if (doesUserExist) {
+    return next(new BadRequestError("User already exists"), 400);
+  }
+
   const user = await User.create(req.body);
 
   sendTokenResponse(user, 201, res);
