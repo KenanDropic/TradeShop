@@ -1,0 +1,9 @@
+export { default as HomeS } from "./HomeS";
+export { default as ProductS } from "./ProductS";
+export { default as CartS } from "./CartS";
+export { default as LoginS } from "./LoginS";
+export { default as RegisterS } from "./RegisterS";
+export { default as ProfileS } from "./ProfileS";
+export { default as ShippingS } from "./ShippingS";
+export { default as ErrorS } from "./ErrorS";
+export { default as PaymentS } from "./PaymentS";

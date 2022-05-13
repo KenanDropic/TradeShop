@@ -1,0 +1,98 @@
+:root{
+  --primary-color: rgb(11,78,179)
+}
+
+main {
+  min-height: 85vh;
+}
+h1{
+  font-size: 1.4rem;
+  padding: 1rem 0;
+}
+h2{
+  font-size: 1.4rem;
+  padding: 0.5rem 0;
+}
+h3 {
+  padding: 1rem 0px;
+}
+
+.btn-block{
+  width: 100%;
+}
+a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
+  font-size: 16px;
+}
+a:hover{
+  color: #000;
+}
+
+/* Login user: i tag */
+.i-pass{
+  position: absolute;
+  right: 1%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* multi-step progress */
+.progress-steps{
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0px;
+  padding: 0px;
+}
+.progress-steps::before,
+.progress{
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 100%;
+  background-color: #dcdcdc;
+}
+/*Linija koja ukazuje na progress*/
+.progress{
+  background-color: var(--primary-color);
+  width: 0%;
+  transition: .3s;
+}
+.step{ 
+  height: 45px;
+  width: 10%;
+  border-radius: 50%;
+  margin: 0px 5px;
+  background-color: #dcdcdc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  font-weight: 700;
+}
+.step::after{
+  content: attr(data-title);
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  font-size: 0.95rem;
+  color: #666;
+}
+.step a {
+  color: #666;
+}
+.step.step.active-step a {
+  color: #f3f3f3;
+}
+.step.active-step{
+  background-color: var(--primary-color);
+  color: #f3f3f3;
+}
+
