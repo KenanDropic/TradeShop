@@ -75,6 +75,27 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, user: currentUserCopy });
 });
 
+// @desc    Update user profile
+// @route   PUT /api/v1/auth/profile
+// @access  Private/Admin
+export const updateUser = asyncHandler(async (req, res, next) => {
+  const fieldsToUpdate = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+    runValidators: true,
+    new: true,
+  });
+
+  if (!user) {
+    return next(new NotFoundError("User not found"));
+  }
+
+  res.status(200).json({ success: true, user });
+});
+
 // @desc    Logout user
 // @route   GET /api/v1/auth/logout
 // @access  Private
