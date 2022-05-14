@@ -47,7 +47,7 @@ const CartS = () => {
 
   return (
     <Row>
-      <Col xl={9} lg={8} md={8} sm={12} xs={12} className="mb-5">
+      <Col xxl={8} xl={9} lg={8} md={8} sm={12} xs={12} className="mb-5">
         <h1>Korpa za kupovinu</h1>
         {cartItems.length === 0 ? (
           <Message>
@@ -112,7 +112,7 @@ const CartS = () => {
         )}
       </Col>
 
-      <Col xl={3} lg={4} md={4} sm={0} xs={0}>
+      <Col xxl={4} xl={3} lg={4} md={4} sm={0} xs={0}>
         <Card>
           <ListGroup variant="flush">
             <ListGroupItem>

@@ -5,5 +5,6 @@ export { default as LoginS } from "./LoginS";
 export { default as RegisterS } from "./RegisterS";
 export { default as ProfileS } from "./ProfileS";
 export { default as ShippingS } from "./ShippingS";
-export { default as ErrorS } from "./ErrorS";
 export { default as PaymentS } from "./PaymentS";
+export { default as PlaceOrderS } from "./PlaceOrderS";
+export { default as ErrorS } from "./ErrorS";

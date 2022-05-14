@@ -8,7 +8,7 @@ const SharedLayout = () => {
     <>
       <Header />
       <main className="py-3">
-        <Container fluid="xl">
+        <Container fluid>
           <Outlet />
         </Container>
       </main>

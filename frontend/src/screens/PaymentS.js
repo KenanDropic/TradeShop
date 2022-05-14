@@ -1,10 +1,9 @@
 import FormContainer from "../components/FormContainer";
 import MultiStep from "../components/MultiStep";
 import { Row, Form, Button } from "react-bootstrap";
-import { useState } from "react";
+import { savePaymentMethod } from "../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const PaymentS = () => {
@@ -27,8 +26,8 @@ const PaymentS = () => {
   }
 
   const onSubmit = (data) => {
-    console.log(data);
-    // navigate to placeorder
+    dispatch(savePaymentMethod(data.paymentMethod));
+    navigate("/placeorder");
   };
 
   return (
