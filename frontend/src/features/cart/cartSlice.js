@@ -14,7 +14,6 @@ const initialState = {
   cartItems: cartItemsFromStorage,
   loading: false,
   isShippingS: false,
-  isPaymentS: false,
   shippingAddress: shippingAddressFromStorage,
 };
 
@@ -69,9 +68,6 @@ const cartSlice = createSlice({
         JSON.stringify(state.shippingAddress)
       );
     },
-    setIsPayment: (state) => {
-      state.isPaymentS = true;
-    },
   },
   extraReducers(builder) {
     builder
@@ -100,11 +96,7 @@ const cartSlice = createSlice({
   },
 });
 
-export const {
-  removeFromCart,
-  setIsShipping,
-  saveShippingAddress,
-  setIsPayment,
-} = cartSlice.actions;
+export const { removeFromCart, setIsShipping, saveShippingAddress } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

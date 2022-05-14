@@ -5,7 +5,7 @@ const MultiStep = ({ currentStep }) => {
   const arrFromSteps = Array.from({ length: 4 }, (_, i) => i + 1);
 
   return (
-    <Row className="progress-steps">
+    <Row className="progress-steps mt-5">
       {/* Linija koja ukazuje na progress */}
       <div
         className="progress"
