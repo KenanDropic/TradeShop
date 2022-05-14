@@ -12,7 +12,7 @@ const LoginS = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const { loading, error, isLogged } = useSelector((state) => state.users);
-  const { isShipping } = useSelector((state) => state.cart);
+  const { isShippingS } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const {
     register,
@@ -32,12 +32,12 @@ const LoginS = () => {
   useEffect(() => {
     if (isLogged) {
       //ako je korisnik logovan i isShipping je true,proslijedi ga na shipping ekran,inače proslijedi ga na profil.
-      if (isShipping) {
+      if (isShippingS) {
         return navigate("/shipping");
       }
       navigate("/profile");
     }
-  }, [isLogged, navigate, isShipping]);
+  }, [isLogged, navigate, isShippingS]);
 
   return (
     <FormContainer>

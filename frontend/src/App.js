@@ -37,7 +37,7 @@ const App = () => {
               <Route exact path="/payment" element={<PaymentS />} />
             </Route>
           </Route>
-          <Route path="*" element={<ErrorS />} />
+          <Route exact path="*" element={<ErrorS />} />
         </Routes>
       </Router>
       <ToastContainer

@@ -13,7 +13,8 @@ const shippingAddressFromStorage = localStorage.getItem("shippingAddress")
 const initialState = {
   cartItems: cartItemsFromStorage,
   loading: false,
-  isShipping: false,
+  isShippingS: false,
+  isPaymentS: false,
   shippingAddress: shippingAddressFromStorage,
 };
 
@@ -58,7 +59,7 @@ const cartSlice = createSlice({
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
     setIsShipping: (state) => {
-      state.isShipping = true;
+      state.isShippingS = true;
     },
     saveShippingAddress: (state, action) => {
       state.shippingAddress = action.payload;
@@ -67,6 +68,9 @@ const cartSlice = createSlice({
         "shippingAddress",
         JSON.stringify(state.shippingAddress)
       );
+    },
+    setIsPayment: (state) => {
+      state.isPaymentS = true;
     },
   },
   extraReducers(builder) {
@@ -96,7 +100,11 @@ const cartSlice = createSlice({
   },
 });
 
-export const { removeFromCart, setIsShipping, saveShippingAddress } =
-  cartSlice.actions;
+export const {
+  removeFromCart,
+  setIsShipping,
+  saveShippingAddress,
+  setIsPayment,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

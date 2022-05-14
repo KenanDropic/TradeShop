@@ -4,7 +4,7 @@ import FormContainer from "../components/FormContainer";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { saveShippingAddress } from "../features/cart/cartSlice";
+import { saveShippingAddress, setIsPayment } from "../features/cart/cartSlice";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import MultiStep from "../components/MultiStep";
@@ -38,6 +38,7 @@ const ShippingS = () => {
 
   const onSubmit = async (data) => {
     dispatch(saveShippingAddress(data));
+    dispatch(setIsPayment());
     navigate("/payment");
   };
 
@@ -46,6 +47,9 @@ const ShippingS = () => {
       <h1>DOSTAVA</h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
+      <Row>
+        <MultiStep currentStep={2} />
+      </Row>
       <Row className="mb-5">
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group>
@@ -105,7 +109,6 @@ const ShippingS = () => {
           </Button>
         </Form>
       </Row>
-      <MultiStep currentStep={2} />
     </FormContainer>
   );
 };
