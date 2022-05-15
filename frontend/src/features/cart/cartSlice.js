@@ -30,7 +30,7 @@ export const addToCart = createAsyncThunk(
       const id2 = [id, qty][0];
       const { data } = await axios.get(`/api/v1/products/${id2}`);
       const itemCartCopy = {
-        id: data.product._id,
+        product: data.product._id,
         name: data.product.name,
         image: data.product.image,
         price: data.product.price,

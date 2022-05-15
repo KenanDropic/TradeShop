@@ -13,6 +13,7 @@ connectDB();
 // Route files
 import productRoutes from "./routes/productsRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import orderRoutes from "./routes/ordersRoutes.js";
 
 // Express initialization
 const app = express();
@@ -27,6 +28,7 @@ app.get("/api/v1", (req, res) => {
 // Mount routers
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/auth", userRoutes);
+app.use("/api/v1/orders", orderRoutes);
 
 // Not Found & Error Handler middleware
 app.use(notFound);

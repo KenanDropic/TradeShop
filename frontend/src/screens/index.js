@@ -7,4 +7,5 @@ export { default as ProfileS } from "./ProfileS";
 export { default as ShippingS } from "./ShippingS";
 export { default as PaymentS } from "./PaymentS";
 export { default as PlaceOrderS } from "./PlaceOrderS";
+export { default as OrderS } from "./OrderS";
 export { default as ErrorS } from "./ErrorS";

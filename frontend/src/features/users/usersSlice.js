@@ -60,7 +60,7 @@ export const getCurrentUser = createAsyncThunk(
   "users/loggedUser",
   async (_, thunkAPI) => {
     try {
-      const { data } = await axios.get("api/v1/auth/profile", {
+      const { data } = await axios.get("/api/v1/auth/profile", {
         headers: { Authorization: `Bearer ${thunkAPI.getState().users.token}` },
       });
       return data.user;
@@ -80,7 +80,7 @@ export const updateUser = createAsyncThunk(
   "users/updateUser",
   async (updateInfo, thunkAPI) => {
     try {
-      const { data } = await axios.put("api/v1/auth/profile", updateInfo, {
+      const { data } = await axios.put("/api/v1/auth/profile", updateInfo, {
         headers: { Authorization: `Bearer ${thunkAPI.getState().users.token}` },
       });
       return data.user;

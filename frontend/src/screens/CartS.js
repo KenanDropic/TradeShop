@@ -55,9 +55,9 @@ const CartS = () => {
           </Message>
         ) : (
           <ListGroup variant="flush">
-            {cartItems.map((item) => {
+            {cartItems.map((item, idx) => {
               return (
-                <ListGroupItem key={item.id}>
+                <ListGroupItem key={idx}>
                   <Row className="align-items-center">
                     <Col xs={2} sm={2} md={2}>
                       <Image src={item.image} alt={item.name} fluid rounded />

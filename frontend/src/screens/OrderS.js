@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Row,
   Col,
@@ -8,68 +9,38 @@ import {
   Card,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import FormContainer from "../components/FormContainer";
-import MultiStep from "../components/MultiStep";
 import Message from "../components/Message";
-import { useNavigate } from "react-router-dom";
-import { placeOrder } from "../features/orders/ordersSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import { getOrderDetails } from "../features/orders/ordersSlice";
+import Loader from "../components/Loader";
 
-const PlaceOrderS = () => {
-  const navigate = useNavigate();
+const OrderS = () => {
+  //   const navigate = useNavigate();
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { cartItems, paymentMethod, shippingAddress } = useSelector(
-    (state) => state.cart
-  );
-  const { country, address, postalCode } = shippingAddress;
-  const { user } = useSelector((state) => state.users);
-  const { order } = useSelector((state) => state.orders);
-
-  if (!shippingAddress.address) {
-    return navigate("/shippging");
-  } else if (!paymentMethod) {
-    return navigate("/payment");
-  }
-
-  // add zero's if there is no decimals
-  const addDecimals = (num) => {
-    return Number((Math.round(num * 100) / 100).toFixed(2));
-  };
-
-  // ukupna cijena izabranih stavki,bez dažbina
-  let itemsPrice = addDecimals(
-    cartItems.reduce((prev, curr) => prev + curr.price * curr.quantity, 0)
-  );
-  // cijena dostave
-  let shippingPrice = addDecimals(itemsPrice > 100 ? 0 : 10);
-
-  // cijena s porezom
-  let taxPrice = addDecimals(Number(itemsPrice * 0.17));
-
-  // ukupno sa svim dažbinama
-  let totalPrice = addDecimals(Number(itemsPrice + shippingPrice + taxPrice));
-
-  // details about order,that will be submitted
-  const orderDetails = {
-    orderItems: cartItems,
+  const { order, error, loading } = useSelector((state) => state.orders);
+  const {
+    orderItems,
+    taxPrice,
+    totalPrice,
+    shippingPrice,
     shippingAddress,
     paymentMethod,
-    taxPrice,
-    shippingPrice,
-    totalPrice,
-    user: user?._id,
-  };
+  } = order;
 
-  const handlePlaceorder = () => {
-    dispatch(placeOrder(orderDetails));
-    navigate(`/orders/${order._id}`);
-  };
+  useEffect(() => {
+    dispatch(getOrderDetails(id));
+    // eslint-disable-next-line
+  }, [id]);
 
-  return (
+  return order.length === 0 || loading === true ? (
+    <Loader />
+  ) : error ? (
+    <Message variant="danger">{error}</Message>
+  ) : (
     <>
-      <FormContainer>
-        <MultiStep currentStep={4} />
-      </FormContainer>
       <Row>
+        <h1>NARUDŽBA {id}</h1>
         <Col xxl="3" xl="4" lg="4" md="4" sm="0" xs="0" className="mb-5">
           <Card>
             <ListGroup vriant="flush">
@@ -79,7 +50,7 @@ const PlaceOrderS = () => {
               <ListGroup.Item className="m-0 p-2">
                 <Row>
                   <Col>Stavke</Col>
-                  <Col>{itemsPrice} KM</Col>
+                  <Col>{totalPrice - taxPrice - shippingPrice} KM</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item className="m-0 p-2">
@@ -100,19 +71,9 @@ const PlaceOrderS = () => {
                   <Col>{totalPrice} KM</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroupItem></ListGroupItem>
-
-              <ListGroupItem className="mx-0 p-3 ">
-                <Button
-                  type="button"
-                  variant="dark"
-                  className="btn-block"
-                  disabled={cartItems.length === 0}
-                  onClick={handlePlaceorder}
-                >
-                  Naručite
-                </Button>
-              </ListGroupItem>
+              <ListGroupItem>PAYPAL</ListGroupItem>
+              <ListGroupItem>PAYLATER</ListGroupItem>
+              <ListGroupItem>DEBIT OR CREDIT CARD</ListGroupItem>
             </ListGroup>
           </Card>
         </Col>
@@ -120,8 +81,11 @@ const PlaceOrderS = () => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h4>DOSTAVA</h4>
+              <p>Ime: {order.user.name}</p>
+              <p>Email: {order.user.email}</p>
               <p>
-                {postalCode},{address},{country}
+                {shippingAddress.postalCode},{shippingAddress.address},
+                {shippingAddress.country}
               </p>
             </ListGroup.Item>
             <ListGroup.Item>
@@ -131,11 +95,11 @@ const PlaceOrderS = () => {
 
             <ListGroup.Item>
               <h4>IZABRANE STAVKE</h4>
-              {cartItems.length === 0 ? (
+              {orderItems.length === 0 ? (
                 <Message>Vaša korpa je prazna</Message>
               ) : (
                 <ListGroup variant="flush">
-                  {cartItems.map((item, idx) => {
+                  {orderItems.map((item, idx) => {
                     return (
                       <ListGroup.Item key={idx}>
                         <Row className="d-flex align-items-center">
@@ -174,4 +138,4 @@ const PlaceOrderS = () => {
   );
 };
 
-export default PlaceOrderS;
+export default OrderS;

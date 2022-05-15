@@ -9,6 +9,7 @@ import {
   ShippingS,
   PaymentS,
   PlaceOrderS,
+  OrderS,
   ErrorS,
 } from "./screens/index";
 import SharedLayout from "./components/SharedLayout";
@@ -39,6 +40,9 @@ const App = () => {
             </Route>
             <Route exact path="/placeorder" element={<PrivateRoute />}>
               <Route exact path="/placeorder" element={<PlaceOrderS />} />
+            </Route>
+            <Route exact path="/orders/:id" element={<PrivateRoute />}>
+              <Route exact path="/orders/:id" element={<OrderS />} />
             </Route>
           </Route>
           <Route exact path="*" element={<ErrorS />} />
