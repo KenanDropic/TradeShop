@@ -120,9 +120,12 @@ const PlaceOrderS = () => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h4>DOSTAVA</h4>
-              <p>
-                {postalCode},{address},{country}
-              </p>
+              <span className="d-block">
+                Adresa:
+                <strong>
+                  {postalCode},{address},{country}
+                </strong>
+              </span>
             </ListGroup.Item>
             <ListGroup.Item>
               <h4>NAČIN PLAĆANJA</h4>

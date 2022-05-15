@@ -1,7 +1,10 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
-import { UnAuthenticatedError } from "../utils/errorResponse.js";
+import {
+  UnAuthenticatedError,
+  UnAuthorizedError,
+} from "../utils/errorResponse.js";
 
 export const authenticate = asyncHandler(async (req, res, next) => {
   let token;
@@ -32,4 +35,13 @@ export const authenticate = asyncHandler(async (req, res, next) => {
       new UnAuthenticatedError("Not authorized to access this route")
     );
   }
+});
+
+export const authorize = asyncHandler((req, res, next) => {
+  if (req.user.isAdmin === false) {
+    return next(
+      new UnAuthorizedError(`User is not authorized to access this route`)
+    );
+  }
+  next();
 });

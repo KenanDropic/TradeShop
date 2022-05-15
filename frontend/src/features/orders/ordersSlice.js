@@ -49,6 +49,27 @@ export const getOrderDetails = createAsyncThunk(
   }
 );
 
+// update order TO PAID - admin only
+export const updateOrderToPaid = createAsyncThunk(
+  "orders/paid",
+  async (id, thunkAPI) => {
+    try {
+      const { data } = await axios.put(`/api/v1/orders/${id}`, {
+        headers: { Authorization: `Bearer ${thunkAPI.getState().users.token}` },
+      });
+
+      return data;
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.error) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const ordersSlice = createSlice({
   name: "orders",
   initialState,

@@ -25,3 +25,9 @@ export class NotFoundError extends BadRequestError {
     this.statusCode = 404;
   }
 }
+export class UnAuthorizedError extends NotFoundError {
+  constructor(message) {
+    super(message);
+    this.statusCode = 403;
+  }
+}

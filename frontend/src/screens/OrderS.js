@@ -81,16 +81,41 @@ const OrderS = () => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h4>DOSTAVA</h4>
-              <p>Ime: {order.user.name}</p>
-              <p>Email: {order.user.email}</p>
-              <p>
-                {shippingAddress.postalCode},{shippingAddress.address},
-                {shippingAddress.country}
-              </p>
+              <span className="d-block">
+                Ime: <strong>{order.user.name}</strong>
+              </span>
+              <span className="d-block">
+                Email: <strong>{order.user.email}</strong>
+              </span>
+              <span className="d-block mb-2">
+                Adresa:
+                <strong>
+                  {shippingAddress.postalCode},{shippingAddress.address},
+                  {shippingAddress.country}
+                </strong>
+              </span>
+              {order.isDelivered ? (
+                <Message variant="success">
+                  Dostavljeno - {order.deliveredAt}
+                </Message>
+              ) : (
+                <Message variant="info">
+                  <strong>Pošiljka nije dostavljena</strong>
+                </Message>
+              )}
             </ListGroup.Item>
             <ListGroup.Item>
               <h4>NAČIN PLAĆANJA</h4>
-              <p>{paymentMethod}</p>
+              <span className="d-block mb-2">
+                Metoda: <strong>{paymentMethod}</strong>
+              </span>
+              {order.isPaid ? (
+                <Message variant="success">Plaćeno - {order.paidAt} </Message>
+              ) : (
+                <Message variant="info">
+                  <strong>Pošiljka nije plaćena</strong>
+                </Message>
+              )}
             </ListGroup.Item>
 
             <ListGroup.Item>
