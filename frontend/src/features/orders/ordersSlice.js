@@ -50,14 +50,15 @@ export const getOrderDetails = createAsyncThunk(
 // update order TO PAID
 export const updateOrderToPaid = createAsyncThunk(
   "orders/paid",
-  async ([id,paymentResult], thunkAPI) => {
+  async ([id, paymentResult], thunkAPI) => {
     try {
       const {
         data: { updatedOrder },
-      } = await axiosAuth.put(`/orders/${[id,paymentResult][0]}`,[id,paymentResult][1]);
+      } = await axiosAuth.put(
+        `/orders/${[id, paymentResult][0]}`,
+        [id, paymentResult][1]
+      );
       return updatedOrder;
-
-      // return order;
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||

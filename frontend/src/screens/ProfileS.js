@@ -90,7 +90,12 @@ const ProfileS = () => {
           </Form>
         </Row>
       </Col>
-      <Col sm="9" md="9" xs="9" lg="9" xl="9"></Col>
+      <Col sm="9" md="9" xs="9" lg="9" xl="9">
+        <h2 style={{ textAlign: "right" }}>Vaše narudžbe</h2>
+        <Row>
+          
+        </Row>
+      </Col>
     </Row>
   );
 };
