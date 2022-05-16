@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
+import axiosAuth from "../../utils/axiosAuth";
 
 const tokenFromStorage = localStorage.getItem("token")
   ? localStorage.getItem("token")
@@ -19,10 +20,12 @@ export const login = createAsyncThunk(
   "users/login",
   async (credentials, thunkAPI) => {
     try {
-      const { data } = await axios.post("/api/v1/auth/login", credentials);
-      localStorage.setItem("token", data.token);
+      const {
+        data: { token },
+      } = await axios.post("/api/v1/auth/login", credentials);
+      localStorage.setItem("token", token);
 
-      return data.token;
+      return token;
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -39,11 +42,12 @@ export const registerUser = createAsyncThunk(
   "users/register",
   async (credentials, thunkAPI) => {
     try {
-      const { data } = await axios.post("/api/v1/auth/register", credentials);
-      console.log(data);
-      localStorage.setItem("token", data.token);
+      const {
+        data: { token },
+      } = await axios.post("/api/v1/auth/register", credentials);
+      localStorage.setItem("token", token);
 
-      return data.token;
+      return token;
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -60,10 +64,10 @@ export const getCurrentUser = createAsyncThunk(
   "users/loggedUser",
   async (_, thunkAPI) => {
     try {
-      const { data } = await axios.get("/api/v1/auth/profile", {
-        headers: { Authorization: `Bearer ${thunkAPI.getState().users.token}` },
-      });
-      return data.user;
+      const {
+        data: { user },
+      } = await axiosAuth.get("/auth/profile");
+      return user;
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -80,10 +84,10 @@ export const updateUser = createAsyncThunk(
   "users/updateUser",
   async (updateInfo, thunkAPI) => {
     try {
-      const { data } = await axios.put("/api/v1/auth/profile", updateInfo, {
-        headers: { Authorization: `Bearer ${thunkAPI.getState().users.token}` },
-      });
-      return data.user;
+      const {
+        data: { user },
+      } = await axios.put("/auth/profile", updateInfo);
+      return user;
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -111,7 +115,6 @@ const usersSlice = createSlice({
         state.isLogged = true;
       })
       .addCase(login.fulfilled, (state, action) => {
-        // console.log("Payload", action.payload);
         state.loading = false;
         state.isLogged = true;
         state.error = "";
@@ -128,7 +131,6 @@ const usersSlice = createSlice({
         state.loading = true;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        // console.log("Payload", action.payload);
         state.loading = false;
         state.isLogged = true;
         state.error = "";

@@ -30,6 +30,11 @@ app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/orders", orderRoutes);
 
+// get paypal config
+app.get("/api/config/paypal", (req, res) =>
+  res.send(process.env.PAYPAL_CLIENT_ID)
+);
+
 // Not Found & Error Handler middleware
 app.use(notFound);
 app.use(errorHandler);

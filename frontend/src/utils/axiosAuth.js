@@ -1,18 +1,17 @@
 import axios from "axios";
 
 const axiosAuth = axios.create({
-  baseURL: "http://localhost:3000/api/v1/auth",
+  baseURL: "http://localhost:3000/api/v1",
   headers: {
     "Content-Type": "application/json",
   },
-  //   headers: { Authorization: "" },
 });
 
 // request interceptors
 axiosAuth.interceptors.request.use(
   (config) => {
-    config.headers.common["Authorization"] = `Bearer ${JSON.parse(
-      localStorage.getItem("token")
+    config.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+      "token"
     )}`;
     return config;
   },
@@ -28,8 +27,8 @@ axiosAuth.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      localStorage.removeItem("token");
-      localStorage.setItem("logged", false);
+      console.log("TO DO - Remove Token");
+      // localStorage.removeItem("token");
     }
     return Promise.reject(error);
   }

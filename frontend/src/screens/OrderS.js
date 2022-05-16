@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -11,11 +11,16 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import { useNavigate, useParams } from "react-router-dom";
-import { getOrderDetails } from "../features/orders/ordersSlice";
+import {
+  getOrderDetails,
+  updateOrderToPaid,
+} from "../features/orders/ordersSlice";
 import Loader from "../components/Loader";
+import axios from "axios";
 
 const OrderS = () => {
   //   const navigate = useNavigate();
+  const [sdkReady, setSdkReady] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
   const { order, error, loading } = useSelector((state) => state.orders);
@@ -29,9 +34,29 @@ const OrderS = () => {
   } = order;
 
   useEffect(() => {
-    dispatch(getOrderDetails(id));
+    const paypalScript = async () => {
+      const { data: clientId } = await axios.get("/api/config/paypal");
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+      script.async = true;
+      script.onload = () => {
+        setSdkReady(true);
+      };
+      document.body.appendChild(script);
+    };
+
+    if (order?.length === 0 || order?.isPaid === true) {
+      dispatch(getOrderDetails(id));
+    } else if (!order?.isPaid) {
+      if (!window.paypal) {
+        paypalScript();
+      } else {
+        setSdkReady(true);
+      }
+    }
     // eslint-disable-next-line
-  }, [id]);
+  }, [id, order?.isPaid, dispatch]);
 
   return order.length === 0 || loading === true ? (
     <Loader />

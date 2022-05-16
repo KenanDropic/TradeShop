@@ -16,7 +16,6 @@ export const authenticate = asyncHandler(async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(" ")[1];
   }
-
   if (!token) {
     return next(
       new UnAuthenticatedError("Not authorized to access this route")
@@ -37,11 +36,11 @@ export const authenticate = asyncHandler(async (req, res, next) => {
   }
 });
 
-export const authorize = asyncHandler((req, res, next) => {
+export const authorize = (req, res, next) => {
   if (req.user.isAdmin === false) {
     return next(
       new UnAuthorizedError(`User is not authorized to access this route`)
     );
   }
   next();
-});
+};
