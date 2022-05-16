@@ -4,14 +4,11 @@ import {
   getOrder,
   updateOrder,
 } from "../controllers/ordersController.js";
-import { authenticate, authorize } from "../middleware/auth.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = express.Router();
 
 router.route("/").post(authenticate, createOrder);
-router
-  .route("/:id")
-  .get(authenticate, getOrder)
-  .put(authenticate, authorize, updateOrder);
+router.route("/:id").get(authenticate, getOrder).put(authenticate, updateOrder);
 
 export default router;

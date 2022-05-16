@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { toast } from "react-toastify";
 import axiosAuth from "../../utils/axiosAuth";
 
@@ -48,18 +47,15 @@ export const getOrderDetails = createAsyncThunk(
   }
 );
 
-// update order TO PAID - ADMIN ONLY
+// update order TO PAID
 export const updateOrderToPaid = createAsyncThunk(
   "orders/paid",
-  async (id, thunkAPI) => {
+  async ([id,paymentResult], thunkAPI) => {
     try {
-      if (thunkAPI.getState().users.user.isAdmin === true) {
-        const {
-          data: { updatedOrder },
-        } = await axiosAuth.put(`/orders/${id}`);
-        console.log(updatedOrder);
-        return updatedOrder;
-      }
+      const {
+        data: { updatedOrder },
+      } = await axiosAuth.put(`/orders/${[id,paymentResult][0]}`,[id,paymentResult][1]);
+      return updatedOrder;
 
       // return order;
     } catch (error) {

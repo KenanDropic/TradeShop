@@ -53,20 +53,12 @@ export const getOrder = asyncHandler(async (req, res, next) => {
 
 // @desc    Update order to paid
 // @route   PUT /api/v1/orders/:id
-// @access  Private/Admin Only
+// @access  Private
 export const updateOrder = asyncHandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
 
   if (!order) {
     return next(new NotFoundError("Order not found"));
-  }
-
-  if (req.user.isAdmin !== true) {
-    return next(
-      new UnAuthenticatedError(
-        `User ${req.user.id} is not authorized to update order ${order.id}`
-      )
-    );
   }
 
   const updatedOrder = await Order.findByIdAndUpdate(
@@ -78,6 +70,7 @@ export const updateOrder = asyncHandler(async (req, res, next) => {
         id: req.body.id,
         status: req.body.status,
         update_time: req.body.update_time,
+        email_address: req.body.payer.email_address,
       },
     },
     {

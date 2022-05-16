@@ -8,6 +8,7 @@ import {
   Image,
   Card,
 } from "react-bootstrap";
+import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import { useNavigate, useParams } from "react-router-dom";
@@ -58,6 +59,10 @@ const OrderS = () => {
     // eslint-disable-next-line
   }, [id, order?.isPaid, dispatch]);
 
+  const successPaymentHandler = (paymentResult) => {
+    dispatch(updateOrderToPaid([id,paymentResult]));
+  };
+
   return order.length === 0 || loading === true ? (
     <Loader />
   ) : error ? (
@@ -96,8 +101,18 @@ const OrderS = () => {
                   <Col>{totalPrice} KM</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroupItem>PAYPAL</ListGroupItem>
-              <ListGroupItem>PAYLATER</ListGroupItem>
+              {!order.isPaid && (
+                <ListGroupItem>
+                  {!sdkReady ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButton
+                      amount={totalPrice}
+                      onSuccess={successPaymentHandler}
+                    />
+                  )}
+                </ListGroupItem>
+              )}
               <ListGroupItem>DEBIT OR CREDIT CARD</ListGroupItem>
             </ListGroup>
           </Card>
