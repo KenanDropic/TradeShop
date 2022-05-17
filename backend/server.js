@@ -12,8 +12,9 @@ connectDB();
 
 // Route files
 import productRoutes from "./routes/productsRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import orderRoutes from "./routes/ordersRoutes.js";
+import usersRoutes from "./routes/usersRoutes.js";
 
 // Express initialization
 const app = express();
@@ -27,8 +28,9 @@ app.get("/api/v1", (req, res) => {
 
 // Mount routers
 app.use("/api/v1/products", productRoutes);
-app.use("/api/v1/auth", userRoutes);
+app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/users", usersRoutes);
 
 // get paypal config
 app.get("/api/config/paypal", (req, res) =>

@@ -85,8 +85,10 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
     return next(new NotFoundError("User not found"));
   }
 
-  res.status(200).json({ success: true, user: currentUserCopy });
+  res.status(200).json({ success: true });
 });
+
+
 
 // send token as response
 const sendTokenResponse = (user, statusCode, response) => {

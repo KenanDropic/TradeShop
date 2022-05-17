@@ -3,7 +3,7 @@ import {
   registerUser,
   loginUser,
   getLoggedUser,
-} from "../controllers/userController.js";
+} from "../controllers/authController.js";
 import { authenticate } from "../middleware/auth.js";
 import ordersRouter from "./ordersRoutes.js";
 
