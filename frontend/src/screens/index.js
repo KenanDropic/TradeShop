@@ -9,3 +9,6 @@ export { default as PaymentS } from "./PaymentS";
 export { default as PlaceOrderS } from "./PlaceOrderS";
 export { default as OrderS } from "./OrderS";
 export { default as ErrorS } from "./ErrorS";
+export { default as AllUsersS } from "./admin/AllUsersS";
+export { default as AllProductsS } from "./admin/AllProductsS";
+export { default as AllOrdersS } from "./admin/AllOrdersS";

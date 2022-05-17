@@ -60,13 +60,13 @@ const Header = () => {
 
               {user?.isAdmin ? (
                 <NavDropdown title="ADMIN">
-                  <LinkContainer to="/">
+                  <LinkContainer to="/admin/users">
                     <NavDropdown.Item>Korisnici</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/">
+                  <LinkContainer to="/admin/products">
                     <NavDropdown.Item>Proizvodi</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/">
+                  <LinkContainer to="/admin/orders">
                     <NavDropdown.Item>Narudžbe</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>

@@ -7,8 +7,8 @@ import {
 } from "../utils/errorResponse.js";
 
 // @desc    Get all users
-// @route   GET /api/v1/auth/users
-// @access  Private/ADMIN 
+// @route   GET /api/v1/users
+// @access  Private/ADMIN
 export const getUsers = asyncHandler(async (req, res, next) => {
   const users = await User.find({});
 
