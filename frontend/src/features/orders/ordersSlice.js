@@ -78,8 +78,8 @@ const ordersSlice = createSlice({
   name: "orders",
   initialState,
   reducers: {
-    resetOrder: (state, action) => {
-      return state;
+    resetOrder: () => {
+      return initialState;
     },
   },
   extraReducers(builder) {

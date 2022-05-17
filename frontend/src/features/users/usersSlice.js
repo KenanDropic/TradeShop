@@ -87,6 +87,9 @@ const usersSlice = createSlice({
       localStorage.removeItem("token");
       return initialState;
     },
+    resetUser: () => {
+      return initialState;
+    },
   },
   extraReducers(builder) {
     builder
@@ -160,6 +163,6 @@ const errorMessage = (error) => {
   return message;
 };
 
-export const { logout } = usersSlice.actions;
+export const { logout, resetUser } = usersSlice.actions;
 
 export default usersSlice.reducer;
