@@ -24,7 +24,11 @@ const OrderS = () => {
   const [sdkReady, setSdkReady] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { order, error, loading } = useSelector((state) => state.orders);
+  const {
+    order,
+    error: ordersError,
+    loading,
+  } = useSelector((state) => state.orders);
   const {
     orderItems,
     taxPrice,
@@ -60,13 +64,13 @@ const OrderS = () => {
   }, [id, order?.isPaid, dispatch]);
 
   const successPaymentHandler = (paymentResult) => {
-    dispatch(updateOrderToPaid([id,paymentResult]));
+    dispatch(updateOrderToPaid([id, paymentResult]));
   };
 
   return order.length === 0 || loading === true ? (
     <Loader />
-  ) : error ? (
-    <Message variant="danger">{error}</Message>
+  ) : ordersError ? (
+    <Message variant="danger">{ordersError}</Message>
   ) : (
     <>
       <Row>

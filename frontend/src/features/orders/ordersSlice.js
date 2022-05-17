@@ -4,6 +4,10 @@ import axiosAuth from "../../utils/axiosAuth";
 
 const initialState = {
   order: [],
+  userOrders: {
+    orders: [],
+    count: 0,
+  },
   loading: false,
   error: "",
 };
@@ -18,12 +22,7 @@ export const placeOrder = createAsyncThunk(
       } = await axiosAuth.post("/orders", orderData);
       return createdOrder;
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -37,12 +36,7 @@ export const getOrderDetails = createAsyncThunk(
       } = await axiosAuth.get(`/orders/${id}`);
       return order;
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -60,12 +54,22 @@ export const updateOrderToPaid = createAsyncThunk(
       );
       return updatedOrder;
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
+      return thunkAPI.rejectWithValue(errorMessage(error));
+    }
+  }
+);
 
-      return thunkAPI.rejectWithValue(message);
+// get user orders
+export const getUserOrders = createAsyncThunk(
+  "orders/userOrders",
+  async (userId, thunkAPI) => {
+    try {
+      const {
+        data: { orders, count },
+      } = await axiosAuth.get(`/auth/${userId}/orders`);
+      return { orders, count };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -74,7 +78,9 @@ const ordersSlice = createSlice({
   name: "orders",
   initialState,
   reducers: {
-    resetOrder: (state, action) => {},
+    resetOrder: (state, action) => {
+      return state;
+    },
   },
   extraReducers(builder) {
     builder
@@ -111,8 +117,31 @@ const ordersSlice = createSlice({
       .addCase(updateOrderToPaid.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(getUserOrders.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUserOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userOrders = action.payload;
+      })
+      .addCase(getUserOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
+
+// structure error message and return
+const errorMessage = (error) => {
+  const message =
+    (error.response && error.response.data && error.response.data.error) ||
+    error.message ||
+    error.toString();
+
+  return message;
+};
+
+export const { resetOrder } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

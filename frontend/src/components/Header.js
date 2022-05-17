@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser, logout } from "../features/users/usersSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { resetOrder } from "../features/orders/ordersSlice";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -19,7 +20,8 @@ const Header = () => {
   }, [dispatch, token]);
 
   const logoutHandler = () => {
-    dispatch(logout());
+    dispatch(logout()); // remove token from storage
+    dispatch(resetOrder()); // reset orders state
     navigate("/");
     toast.success("Odjava uspješna");
   };

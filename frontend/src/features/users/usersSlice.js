@@ -27,12 +27,7 @@ export const login = createAsyncThunk(
 
       return token;
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -49,12 +44,7 @@ export const registerUser = createAsyncThunk(
 
       return token;
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.messsage ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -69,12 +59,7 @@ export const getCurrentUser = createAsyncThunk(
       } = await axiosAuth.get("/auth/profile");
       return user;
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -89,12 +74,7 @@ export const updateUser = createAsyncThunk(
       } = await axios.put("/auth/profile", updateInfo);
       return user;
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -169,6 +149,16 @@ const usersSlice = createSlice({
       });
   },
 });
+
+// structure error message and return
+const errorMessage = (error) => {
+  const message =
+    (error.response && error.response.data && error.response.data.error) ||
+    error.message ||
+    error.toString();
+
+  return message;
+};
 
 export const { logout } = usersSlice.actions;
 

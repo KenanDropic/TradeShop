@@ -16,12 +16,7 @@ export const listProducts = createAsyncThunk(
       const { data } = await axios.get("/api/v1/products");
       return data;
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -34,12 +29,7 @@ export const getSingleProduct = createAsyncThunk(
       const { data } = await axios.get(`/api/v1/products/${id}`);
       return data;
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -78,5 +68,15 @@ const productsSlice = createSlice({
       });
   },
 });
+
+// structure error message and return
+const errorMessage = (error) => {
+  const message =
+    (error.response && error.response.data && error.response.data.error) ||
+    error.message ||
+    error.toString();
+
+  return message;
+};
 
 export default productsSlice.reducer;

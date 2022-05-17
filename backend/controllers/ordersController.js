@@ -82,7 +82,7 @@ export const updateOrder = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, updatedOrder });
 });
 
-// @desc    Get all user orders
+// @desc    Get all orders for logged user
 // @route   GET /api/v1/auth/:userId/orders
 // @access  Private
 export const getUserOrders = asyncHandler(async (req, res, next) => {

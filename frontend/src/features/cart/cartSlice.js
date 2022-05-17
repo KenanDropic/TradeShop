@@ -40,12 +40,7 @@ export const addToCart = createAsyncThunk(
       //thunkAPI.fulfillWithValue vraća vrijednost u action.payload-u,a mi toj vrijednosti možemo pristupiti u reducerima,u ovom slučaju u extraReducers-u.
       return thunkAPI.fulfillWithValue(itemCartCopy);
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(errorMessage(error));
     }
   }
 );
@@ -105,6 +100,16 @@ const cartSlice = createSlice({
       });
   },
 });
+
+// structure error message and return
+const errorMessage = (error) => {
+  const message =
+    (error.response && error.response.data && error.response.data.error) ||
+    error.message ||
+    error.toString();
+
+  return message;
+};
 
 export const {
   removeFromCart,
