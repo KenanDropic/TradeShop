@@ -42,13 +42,33 @@ const Header = () => {
                 </Nav.Link>
               </LinkContainer>
               {user !== null ? (
-                <NavDropdown title={user?.name} id="username">
+                <NavDropdown title={user?.name}>
                   <LinkContainer to="/profile">
                     <NavDropdown.Item>Profil</NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
                     Odjavite se
                   </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to="/login">
+                  <Nav.Link active={false}>
+                    <i className="fas fa-user" /> Prijava
+                  </Nav.Link>
+                </LinkContainer>
+              )}
+
+              {user?.isAdmin ? (
+                <NavDropdown title="ADMIN">
+                  <LinkContainer to="/">
+                    <NavDropdown.Item>Korisnici</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/">
+                    <NavDropdown.Item>Proizvodi</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/">
+                    <NavDropdown.Item>Narudžbe</NavDropdown.Item>
+                  </LinkContainer>
                 </NavDropdown>
               ) : (
                 <LinkContainer to="/login">

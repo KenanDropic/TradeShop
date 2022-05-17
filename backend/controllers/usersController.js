@@ -8,10 +8,9 @@ import {
 
 // @desc    Get all users
 // @route   GET /api/v1/auth/users
-// @access  Private / ADMIN Only
+// @access  Private/ADMIN 
 export const getUsers = asyncHandler(async (req, res, next) => {
-  const users = await User.find();
-  console.log(users);
+  const users = await User.find({});
 
   if (!users) {
     return next(new NotFoundError("User not found"));
