@@ -14,6 +14,7 @@ import {
   AllUsersS,
   AllOrdersS,
   AllProductsS,
+  EditUserS,
 } from "./screens/index";
 import SharedLayout from "./components/SharedLayout";
 import PrivateRoute from "./components/PrivateRoute";
@@ -50,6 +51,7 @@ const App = () => {
             <Route exact path="/admin/users" element={<AllUsersS />} />
             <Route exact path="/admin/products" element={<AllProductsS />} />
             <Route exact path="/admin/orders" element={<AllOrdersS />} />
+            <Route exact path="/admin/users/:id/edit" element={<EditUserS />} />
           </Route>
           <Route exact path="*" element={<ErrorS />} />
         </Routes>

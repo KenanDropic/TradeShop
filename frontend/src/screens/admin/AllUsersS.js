@@ -70,7 +70,7 @@ const AllUsersS = () => {
                       )}
                     </td>
                     <td>
-                      <Link to={`user/${u._id}/edit`}>
+                      <Link to={`${u._id}/edit`}>
                         <Button variant="light" className="btn-sm">
                           <i className="fas fa-edit" />
                         </Button>

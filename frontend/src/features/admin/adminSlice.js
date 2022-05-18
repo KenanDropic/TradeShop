@@ -6,6 +6,7 @@ const initialState = {
   users: null,
   products: null,
   orders: null,
+  userToEdit: {},
   loading: false,
   error: "",
   isDeleted: false,
@@ -33,6 +34,22 @@ export const deleteUser = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       await axiosAuth.delete(`/users/${id}`);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(errorMessage(error));
+    }
+  }
+);
+
+// get user by id
+export const getSingleUser = createAsyncThunk(
+  "users/singleUser",
+  async (id, thunkAPI) => {
+    try {
+      const {
+        data: { user },
+      } = await axiosAuth.get(`/users/${id}`);
+
+      return user;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
     }
@@ -71,6 +88,17 @@ const adminSlice = createSlice({
       .addCase(deleteUser.rejected, (state, action) => {
         state.loading = false;
         state.isDeleted = false;
+        state.error = action.payload;
+      })
+      .addCase(getSingleUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getSingleUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userToEdit = action.payload;
+      })
+      .addCase(getSingleUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       });
   },
