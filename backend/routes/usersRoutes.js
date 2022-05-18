@@ -3,6 +3,7 @@ import {
   deleteUser,
   getUser,
   getUsers,
+  updateUser,
 } from "../controllers/usersController.js";
 import { authenticate, authorize } from "../middleware/auth.js";
 
@@ -13,6 +14,6 @@ router.use(authorize);
 
 // Admin only
 router.route("/").get(getUsers);
-router.route("/:id").get(getUser).delete(deleteUser);
+router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
 
 export default router;

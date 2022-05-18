@@ -19,13 +19,32 @@ export const getUsers = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/users/:id
 // @access  Private/ADMIN
 export const getUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id).select("-password");
 
   if (!user) {
     return next(new NotFoundError("User not found"));
   }
 
   res.status(200).json({ success: true, user });
+});
+
+// @desc    Update user
+// @route   PUT /api/v1/users/:id
+// @access  Private/ADMIN
+export const updateUser = asyncHandler(async (req, res, next) => {
+  const { name, email, isAdmin } = req.body;
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new NotFoundError("User not found"));
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({ success: true, updatedUser });
 });
 
 // @desc    Delete user
