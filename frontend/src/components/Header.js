@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser, logout } from "../features/users/usersSlice";
+import { getCurrentUser, logout, resetUser } from "../features/users/usersSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { resetOrder } from "../features/orders/ordersSlice";
+import { resetAdminState } from "../features/admin/adminSlice";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -21,7 +22,9 @@ const Header = () => {
 
   const logoutHandler = () => {
     dispatch(logout()); // remove token from storage
+    dispatch(resetUser()); // remove token from storage
     dispatch(resetOrder()); // reset orders state
+    dispatch(resetAdminState()); // reset admin state
     navigate("/");
     toast.success("Odjava uspješna");
   };
@@ -41,7 +44,7 @@ const Header = () => {
                   <i className="fas fa-shopping-cart" /> Korpa
                 </Nav.Link>
               </LinkContainer>
-              {user !== null ? (
+              {user && user !== null ? (
                 <NavDropdown title={user?.name}>
                   <LinkContainer to="/profile">
                     <NavDropdown.Item>Profil</NavDropdown.Item>
@@ -58,7 +61,7 @@ const Header = () => {
                 </LinkContainer>
               )}
 
-              {user?.isAdmin ? (
+              {user?.isAdmin && (
                 <NavDropdown title="ADMIN">
                   <LinkContainer to="/admin/users">
                     <NavDropdown.Item>Korisnici</NavDropdown.Item>
@@ -70,12 +73,6 @@ const Header = () => {
                     <NavDropdown.Item>Narudžbe</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
-              ) : (
-                <LinkContainer to="/login">
-                  <Nav.Link active={false}>
-                    <i className="fas fa-user" /> Prijava
-                  </Nav.Link>
-                </LinkContainer>
               )}
             </Nav>
           </Navbar.Collapse>

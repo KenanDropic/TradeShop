@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers } from "../../features/admin/adminSlice";
-import { Table, Button } from "react-bootstrap";
+import { deleteUser, getAllUsers } from "../../features/admin/adminSlice";
+import { Table, Button, Modal } from "react-bootstrap";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { Link } from "react-router-dom";
@@ -15,6 +15,7 @@ const AllUsersS = () => {
     users,
     loading: adminLoading,
     error: adminError,
+    isDeleted,
   } = useSelector((state) => state.admin);
 
   useEffect(() => {
@@ -24,10 +25,12 @@ const AllUsersS = () => {
     }
     dispatch(getAllUsers());
     // eslint-disable-next-line
-  }, [dispatch]);
+  }, [dispatch, user?.isAdmin, isDeleted]);
 
   const handleDelete = (id) => {
-    console.log("to do - delete user");
+    if (window.confirm("Da li ste sigurni da želite obrisati korisnika")) {
+      dispatch(deleteUser(id));
+    }
   };
 
   return (
@@ -49,36 +52,40 @@ const AllUsersS = () => {
             </tr>
           </thead>
           <tbody>
-            {users?.map((u, idx) => {
-              return (
-                <tr key={idx}>
-                  <td>{u._id}</td>
-                  <td>{u.name}</td>
-                  <td>{u.email}</td>
-                  <td>
-                    {u.isAdmin ? (
-                      <i className="fas fa-check" style={{ color: "green" }} />
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }} />
-                    )}
-                  </td>
-                  <td>
-                    <Link to={`user/${user._id}/edit`}>
-                      <Button variant="light" className="btn-sm">
-                        <i className="fas fa-edit" />
+            {users?.length > 0 &&
+              users?.map((u, idx) => {
+                return (
+                  <tr key={idx}>
+                    <td>{u._id}</td>
+                    <td>{u.name}</td>
+                    <td>{u.email}</td>
+                    <td>
+                      {u.isAdmin ? (
+                        <i
+                          className="fas fa-check"
+                          style={{ color: "green" }}
+                        />
+                      ) : (
+                        <i className="fas fa-times" style={{ color: "red" }} />
+                      )}
+                    </td>
+                    <td>
+                      <Link to={`user/${u._id}/edit`}>
+                        <Button variant="light" className="btn-sm">
+                          <i className="fas fa-edit" />
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="danger"
+                        className="btn-sm"
+                        onClick={() => handleDelete(u._id)}
+                      >
+                        <i className="fas fa-trash" />
                       </Button>
-                    </Link>
-                    <Button
-                      variant="danger"
-                      className="btn-sm"
-                      onClick={handleDelete(user._id)}
-                    >
-                      <i className="fas fa-trash" />
-                    </Button>
-                  </td>
-                </tr>
-              );
-            })}
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
       )}

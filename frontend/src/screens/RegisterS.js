@@ -29,6 +29,7 @@ const RegisterS = () => {
   // register user
   const onSubmit = async (data) => {
     dispatch(registerUser(data));
+    navigate("/profile");
   };
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosAuth from "../../utils/axiosAuth";
+import { toast } from "react-toastify";
 
 const initialState = {
   users: null,
@@ -7,6 +8,7 @@ const initialState = {
   orders: null,
   loading: false,
   error: "",
+  isDeleted: false,
 };
 
 // get all users
@@ -19,6 +21,18 @@ export const getAllUsers = createAsyncThunk(
       } = await axiosAuth.get("/users");
 
       return users;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(errorMessage(error));
+    }
+  }
+);
+
+// delete user
+export const deleteUser = createAsyncThunk(
+  "users/delete",
+  async (id, thunkAPI) => {
+    try {
+      await axiosAuth.delete(`/users/${id}`);
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
     }
@@ -44,6 +58,19 @@ const adminSlice = createSlice({
       })
       .addCase(getAllUsers.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state) => {
+        state.loading = false;
+        state.isDeleted = true;
+        toast.success("Korisnik obrisan");
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.isDeleted = false;
         state.error = action.payload;
       });
   },
