@@ -15,6 +15,19 @@ export const getUsers = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, users });
 });
 
+// @desc    Get single user
+// @route   GET /api/v1/users/:id
+// @access  Private/ADMIN
+export const getUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new NotFoundError("User not found"));
+  }
+
+  res.status(200).json({ success: true, user });
+});
+
 // @desc    Delete user
 // @route   DELETE /api/v1/users/:id
 // @access  Private/ADMIN
