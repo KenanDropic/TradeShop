@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getSingleUser } from "../../features/admin/adminSlice";
+import { getSingleUser, updateUser } from "../../features/admin/adminSlice";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { Link } from "react-router-dom";
@@ -19,6 +19,7 @@ const EditUserS = () => {
     userToEdit,
     loading: adminLoading,
     error: adminError,
+    isEdited,
   } = useSelector((state) => state.admin);
 
   // useForm hook
@@ -31,18 +32,15 @@ const EditUserS = () => {
     defaultValues: {
       name: "",
       email: "",
-      isAdmin: "",
+      role: "",
     },
   });
 
   useEffect(() => {
-    if (user?.isAdmin === false) {
-      return navigate("/");
-    }
     dispatch(getSingleUser(id));
 
     // eslint-disable-next-line
-  }, [dispatch, user?.isAdmin, id]);
+  }, [dispatch, isEdited, id]);
 
   // useEffect to fill form with fetched values
   useEffect(() => {
@@ -50,13 +48,15 @@ const EditUserS = () => {
       const defaults = {
         name: userToEdit?.name,
         email: userToEdit?.email,
-        isAdmin: userToEdit?.isAdmin,
+        role: userToEdit?.role,
       };
       reset(defaults);
     }
+    // eslint-disable-next-line
   }, [userToEdit]);
 
   const onSubmit = (data) => {
+    dispatch(updateUser([id, data]));
     console.log(data);
   };
 
@@ -106,14 +106,16 @@ const EditUserS = () => {
               {errors.email?.message}
             </span>
           </Form.Group>
-          <Form.Group className="mt-3">
-            <Form.Check
-              {...register("isAdmin")}
-              type="checkbox"
-              checked={userToEdit?.isAdmin === true ? true : false}
-              label="Postavite korisnika za admina?"
-            />
+          <Form.Group>
+            <Form.Label>Uloga</Form.Label>
+            {userToEdit?.role !== "admin" && (
+              <Form.Select {...register("role")}>
+                <option value="user">user</option>
+                <option value="admin">admin</option>
+              </Form.Select>
+            )}
           </Form.Group>
+
           <Button type="submit" variant="dark" className="mt-3">
             Ažurirajte
           </Button>
