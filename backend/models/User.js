@@ -23,10 +23,10 @@ const UserSchema = new mongoose.Schema(
       minlength: 6,
       select: false, //znači da password polje neće biti vidljivo kada se user bude dohvatao putem API-a
     },
-    isAdmin: {
-      type: Boolean,
-      required: true,
-      default: false,
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
