@@ -32,7 +32,7 @@ export const getUser = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/users/:id
 // @access  Private/ADMIN
 export const updateUser = asyncHandler(async (req, res, next) => {
-  const { name, email, isAdmin } = req.body;
+  const { name, email, role } = req.body;
   const user = await User.findById(req.params.id);
 
   if (!user) {

@@ -10,7 +10,7 @@ import {
 // @route   POST /api/v1/auth/register
 // @access  Public
 export const registerUser = asyncHandler(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   if (!name || !email || !password) {
     return next(new BadRequestError("Please provide all values"), 400);
@@ -70,6 +70,7 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
     name: currentUser.name,
     email: currentUser.email,
     isAdmin: currentUser.isAdmin,
+    role: currentUser.role,
   };
 
   res.status(200).json({ success: true, user: currentUserCopy });
@@ -87,8 +88,6 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true });
 });
-
-
 
 // send token as response
 const sendTokenResponse = (user, statusCode, response) => {
