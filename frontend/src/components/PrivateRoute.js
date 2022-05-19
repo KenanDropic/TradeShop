@@ -1,17 +1,26 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
-import { useCurrentUser } from "../customHooks/useCurrentUser";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Loader from "./Loader";
 
-const PrivateRoute = () => {
-  const { logged, checkingStatus } = useCurrentUser();
+const PrivateRoute = ({ allowedRoles }) => {
+  const location = useLocation();
+  const { isLogged, user, loading } = useSelector((state) => state.users);
 
-  if (checkingStatus) {
+  if (loading) {
     return <Loader />;
   }
 
-  return logged === true ? <Outlet /> : <Navigate to="/login" />;
+  // console.log(logged, roleS);
+
+  if (!loading && user) {
+    return user && allowedRoles.includes(user?.role) ? (
+      <Outlet />
+    ) : user ? (
+      <Navigate to="/" state={{ from: location }} replace />
+    ) : (
+      <Navigate to="/login" state={{ from: location }} replace />
+    );
+  }
 };
 
 export default PrivateRoute;

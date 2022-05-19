@@ -2,7 +2,11 @@ import { useEffect } from "react";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser, logout, resetUser } from "../features/users/usersSlice";
+import {
+  getCurrentUser,
+  logout,
+  resetUser,
+} from "../features/users/usersSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { resetOrder } from "../features/orders/ordersSlice";
@@ -22,7 +26,7 @@ const Header = () => {
 
   const logoutHandler = () => {
     dispatch(logout()); // remove token from storage
-    dispatch(resetUser()); // remove token from storage
+    dispatch(resetUser()); // remove token from state
     dispatch(resetOrder()); // reset orders state
     dispatch(resetAdminState()); // reset admin state
     navigate("/");
@@ -61,7 +65,7 @@ const Header = () => {
                 </LinkContainer>
               )}
 
-              {user?.isAdmin && (
+              {user?.role === "admin" && (
                 <NavDropdown title="ADMIN">
                   <LinkContainer to="/admin/users">
                     <NavDropdown.Item>Korisnici</NavDropdown.Item>

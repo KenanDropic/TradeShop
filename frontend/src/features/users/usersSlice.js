@@ -125,17 +125,18 @@ const usersSlice = createSlice({
         state.isLogged = false;
         state.error = action.payload;
       })
-      .addCase(getCurrentUser.pending, (state, action) => {
-        state.isLogged = true;
+      .addCase(getCurrentUser.pending, (state) => {
+        state.loading = true;
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLogged = true;
-        state.error = "";
+        state.loading = false;
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.isLogged = false;
         state.error = action.payload;
+        state.loading = false;
       })
       .addCase(updateUser.pending, (state) => {
         state.loading = true;

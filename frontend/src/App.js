@@ -15,6 +15,7 @@ import {
   AllOrdersS,
   AllProductsS,
   EditUserS,
+  UnauthorizedS,
 } from "./screens/index";
 import SharedLayout from "./components/SharedLayout";
 import PrivateRoute from "./components/PrivateRoute";
@@ -33,26 +34,28 @@ const App = () => {
             <Route exact path="/cart/:id" element={<CartS />} />
             <Route exact path="/login" element={<LoginS />} />
             <Route exact path="/register" element={<RegisterS />} />
-            <Route exact path="/profile" element={<PrivateRoute />}>
+
+            {/* Rute koje zahtijevaju autentifikaciju */}
+            <Route element={<PrivateRoute allowedRoles={["user", "admin"]} />}>
               <Route exact path="/profile" element={<ProfileS />} />
-            </Route>
-            <Route exact path="/shipping" element={<PrivateRoute />}>
               <Route exact path="/shipping" element={<ShippingS />} />
-            </Route>
-            <Route exact path="/payment" element={<PrivateRoute />}>
               <Route exact path="/payment" element={<PaymentS />} />
-            </Route>
-            <Route exact path="/placeorder" element={<PrivateRoute />}>
               <Route exact path="/placeorder" element={<PlaceOrderS />} />
-            </Route>
-            <Route exact path="/orders/:id" element={<PrivateRoute />}>
               <Route exact path="/orders/:id" element={<OrderS />} />
             </Route>
-            <Route exact path="/admin/users" element={<AllUsersS />} />
-            <Route exact path="/admin/products" element={<AllProductsS />} />
-            <Route exact path="/admin/orders" element={<AllOrdersS />} />
-            <Route exact path="/admin/users/:id/edit" element={<EditUserS />} />
+            {/* Rute koje zahtijevaju autentifikaciju i autorizaciju(ADMIN) */}
+            <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
+              <Route exact path="/admin/users" element={<AllUsersS />} />
+              <Route exact path="/admin/products" element={<AllProductsS />} />
+              <Route exact path="/admin/orders" element={<AllOrdersS />} />
+              <Route
+                exact
+                path="/admin/users/:id/edit"
+                element={<EditUserS />}
+              />
+            </Route>
           </Route>
+          <Route exact path="/unauthorized" element={<UnauthorizedS />} />
           <Route exact path="*" element={<ErrorS />} />
         </Routes>
       </Router>

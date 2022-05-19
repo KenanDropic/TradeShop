@@ -10,6 +10,7 @@ const initialState = {
   loading: false,
   error: "",
   isDeleted: false,
+  isEdited: false,
 };
 
 // get all users
@@ -50,6 +51,22 @@ export const getSingleUser = createAsyncThunk(
       } = await axiosAuth.get(`/users/${id}`);
 
       return user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(errorMessage(error));
+    }
+  }
+);
+
+// update user
+export const updateUser = createAsyncThunk(
+  "users/update",
+  async ([id, reqData], thunkAPI) => {
+    try {
+      const {
+        data: { updatedUser },
+      } = await axiosAuth.put(`/users/${[id, reqData][0]}`, [id, reqData][1]);
+
+      return updatedUser;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
     }
@@ -98,6 +115,18 @@ const adminSlice = createSlice({
         state.userToEdit = action.payload;
       })
       .addCase(getSingleUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isEdited = true;
+        toast.success("Ažurirali ste korisnika");
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
