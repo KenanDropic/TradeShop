@@ -10,7 +10,7 @@ import { authenticate, authorize } from "../middleware/auth.js";
 const router = express.Router();
 
 router.use(authenticate);
-router.use(authorize);
+router.use(authorize("admin"));
 
 // Admin only
 router.route("/").get(getUsers);

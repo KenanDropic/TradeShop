@@ -19,7 +19,6 @@ const EditUserS = () => {
     userToEdit,
     loading: adminLoading,
     error: adminError,
-    isEdited,
   } = useSelector((state) => state.admin);
 
   // useForm hook
@@ -40,7 +39,7 @@ const EditUserS = () => {
     dispatch(getSingleUser(id));
 
     // eslint-disable-next-line
-  }, [dispatch, isEdited, id]);
+  }, [dispatch, id]);
 
   // useEffect to fill form with fetched values
   useEffect(() => {
@@ -57,7 +56,6 @@ const EditUserS = () => {
 
   const onSubmit = (data) => {
     dispatch(updateUser([id, data]));
-    console.log(data);
   };
 
   return adminLoading ? (
@@ -107,12 +105,14 @@ const EditUserS = () => {
             </span>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Uloga</Form.Label>
             {userToEdit?.role !== "admin" && (
-              <Form.Select {...register("role")}>
-                <option value="user">user</option>
-                <option value="admin">admin</option>
-              </Form.Select>
+              <>
+                <Form.Label>Uloga</Form.Label>
+                <Form.Select {...register("role")}>
+                  <option value="user">user</option>
+                  <option value="admin">admin</option>
+                </Form.Select>
+              </>
             )}
           </Form.Group>
 

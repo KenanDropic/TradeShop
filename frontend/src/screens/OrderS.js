@@ -126,10 +126,10 @@ const OrderS = () => {
             <ListGroup.Item>
               <h4>DOSTAVA</h4>
               <span className="d-block">
-                Ime: <strong>{order.user.name}</strong>
+                Ime: <strong>{order.user?.name}</strong>
               </span>
               <span className="d-block">
-                Email: <strong>{order.user.email}</strong>
+                Email: <strong>{order.user?.email}</strong>
               </span>
               <span className="d-block mb-2">
                 Adresa:
@@ -140,7 +140,7 @@ const OrderS = () => {
               </span>
               {order.isDelivered ? (
                 <Message variant="success">
-                  Dostavljeno - {order.deliveredAt}
+                  Dostavljeno - {order?.deliveredAt}
                 </Message>
               ) : (
                 <Message variant="info">

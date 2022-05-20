@@ -54,6 +54,30 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
+// @desc    Update logged user
+// @route   PUT /api/v1/auth/profile
+// @access  Public
+export const updateUserProfile = asyncHandler(async (req, res, next) => {
+  const { name, email } = req.body;
+
+  if (!email || !name) {
+    return next(new BadRequestError("Please provide all values"));
+  }
+
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    return next(new NotFoundError("User not found"));
+  }
+
+  user.name = name;
+  user.email = email;
+
+  const updatedUser = await user.save();
+
+  res.status(200).json({ success: true, updatedUser });
+});
+
 // @desc    Get current user
 // @route   GET /api/v1/auth/profile
 // @access  Private

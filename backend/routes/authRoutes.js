@@ -3,6 +3,7 @@ import {
   registerUser,
   loginUser,
   getLoggedUser,
+  updateUserProfile,
 } from "../controllers/authController.js";
 import { authenticate } from "../middleware/auth.js";
 import ordersRouter from "./ordersRoutes.js";
@@ -14,6 +15,9 @@ router.use("/:userId/orders", ordersRouter);
 
 router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
-router.route("/profile").get(authenticate, getLoggedUser);
+router
+  .route("/profile")
+  .get(authenticate, getLoggedUser)
+  .put(authenticate, updateUserProfile);
 
 export default router;

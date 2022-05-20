@@ -65,14 +65,14 @@ export const getCurrentUser = createAsyncThunk(
 );
 
 // update user
-export const updateUser = createAsyncThunk(
-  "users/updateUser",
+export const updateUserDetails = createAsyncThunk(
+  "users/updateUserDetails",
   async (updateInfo, thunkAPI) => {
     try {
       const {
-        data: { user },
-      } = await axios.put("/auth/profile", updateInfo);
-      return user;
+        data: { updatedUser },
+      } = await axiosAuth.put("/auth/profile", updateInfo);
+      return updatedUser;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
     }
@@ -138,18 +138,17 @@ const usersSlice = createSlice({
         state.error = action.payload;
         state.loading = false;
       })
-      .addCase(updateUser.pending, (state) => {
+      .addCase(updateUserDetails.pending, (state) => {
         state.loading = true;
       })
-      .addCase(updateUser.fulfilled, (state, action) => {
+      .addCase(updateUserDetails.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = "";
         state.user = action.payload;
         toast.success("Ažuriranje profila uspješno");
       })
-      .addCase(updateUser.rejected, (state, action) => {
-        state.loading = false;
+      .addCase(updateUserDetails.rejected, (state, action) => {
         state.error = action.payload;
+        state.loading = false;
       });
   },
 });

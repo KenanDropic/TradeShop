@@ -11,7 +11,7 @@ import Loader from "../components/Loader";
 const RegisterS = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
-  const { loading, error, isLogged } = useSelector((state) => state.users);
+  const { loading, error, user } = useSelector((state) => state.users);
 
   const navigate = useNavigate();
   const {
@@ -29,14 +29,13 @@ const RegisterS = () => {
   // register user
   const onSubmit = async (data) => {
     dispatch(registerUser(data));
-    navigate("/profile");
   };
 
   useEffect(() => {
-    if (isLogged) {
-      // navigate("/profile");
+    if (user !== null) {
+      return navigate("/profile");
     }
-  }, [isLogged, navigate]);
+  }, [navigate, user]);
 
   return (
     <FormContainer>

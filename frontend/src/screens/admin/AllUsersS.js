@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, getAllUsers } from "../../features/admin/adminSlice";
-import { Table, Button, Modal } from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { Link } from "react-router-dom";
@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 const AllUsersS = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.users);
   const {
     users,
     loading: adminLoading,
@@ -19,13 +18,9 @@ const AllUsersS = () => {
   } = useSelector((state) => state.admin);
 
   useEffect(() => {
-    if (user?.isAdmin === false) {
-      //not an admin,navigate to home
-      return navigate("/");
-    }
     dispatch(getAllUsers());
     // eslint-disable-next-line
-  }, [dispatch, user?.isAdmin, isDeleted]);
+  }, [dispatch, isDeleted]);
 
   const handleDelete = (id) => {
     if (window.confirm("Da li ste sigurni da želite obrisati korisnika")) {
@@ -60,7 +55,7 @@ const AllUsersS = () => {
                     <td>{u.name}</td>
                     <td>{u.email}</td>
                     <td>
-                      {u.isAdmin ? (
+                      {u.role === "admin" ? (
                         <i
                           className="fas fa-check"
                           style={{ color: "green" }}

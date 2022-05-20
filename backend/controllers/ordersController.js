@@ -1,6 +1,6 @@
 import Order from "../models/Order.js";
 import asyncHandler from "express-async-handler";
-import { NotFoundError, UnAuthenticatedError } from "../utils/errorResponse.js";
+import { NotFoundError } from "../utils/errorResponse.js";
 
 // @desc    Create new order
 // @route   POST /api/v1/orders

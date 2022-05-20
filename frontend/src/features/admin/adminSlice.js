@@ -10,7 +10,6 @@ const initialState = {
   loading: false,
   error: "",
   isDeleted: false,
-  isEdited: false,
 };
 
 // get all users
@@ -123,7 +122,6 @@ const adminSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.isEdited = true;
         toast.success("Ažurirali ste korisnika");
       })
       .addCase(updateUser.rejected, (state, action) => {
