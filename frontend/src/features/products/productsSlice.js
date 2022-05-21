@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import axiosAuth from "../../utils/axiosAuth";
+import { toast } from "react-toastify";
 
 const initialState = {
   products: [],
@@ -86,7 +87,16 @@ export const deleteProduct = createAsyncThunk(
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    resetIsStates: (state) => {
+      return {
+        ...state,
+        isCreated: false,
+        isDeleted: false,
+        isEdited: false,
+      };
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(listProducts.pending, (state) => {
@@ -143,6 +153,7 @@ const productsSlice = createSlice({
         state.loading = false;
         state.isEdited = true;
         state.product = action.payload;
+        toast.success("Ažuriranje uspješno!");
       })
       .addCase(editProduct.rejected, (state, action) => {
         state.loading = false;
@@ -160,5 +171,7 @@ const errorMessage = (error) => {
 
   return message;
 };
+
+export const { resetIsStates } = productsSlice.actions;
 
 export default productsSlice.reducer;
