@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, getAllUsers } from "../../features/admin/adminSlice";
 import { Table, Button } from "react-bootstrap";
@@ -8,7 +7,6 @@ import Message from "../../components/Message";
 import { Link } from "react-router-dom";
 
 const AllUsersS = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     users,
@@ -84,7 +82,6 @@ const AllUsersS = () => {
           </tbody>
         </Table>
       )}
-      ;
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleUser, updateUser } from "../../features/admin/adminSlice";
 import Loader from "../../components/Loader";
@@ -12,9 +12,7 @@ import FormContainer from "../../components/FormContainer";
 const EditUserS = () => {
   const { id } = useParams();
   //redux toolkit stuff
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.users);
   const {
     userToEdit,
     loading: adminLoading,
