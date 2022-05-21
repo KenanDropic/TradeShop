@@ -3,6 +3,7 @@ import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import colors from "colors";
 import { notFound, errorHandler } from "./middleware/error.js";
+import path from "path";
 
 // Load env variables
 dotenv.config();
@@ -15,6 +16,7 @@ import productRoutes from "./routes/productsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import orderRoutes from "./routes/ordersRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 // Express initialization
 const app = express();
@@ -31,11 +33,16 @@ app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/users", usersRoutes);
+app.use("/api/v1/upload", uploadRoutes);
 
 // get paypal config
 app.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
+
+// Set static folder,so we can go to any domain and do  /our image name and access image in browser
+const __dirname = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // Not Found & Error Handler middleware
 app.use(notFound);
