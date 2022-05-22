@@ -1,6 +1,6 @@
 import Order from "../models/Order.js";
 import asyncHandler from "express-async-handler";
-import { NotFoundError } from "../utils/errorResponse.js";
+import { NotFoundError, UnAuthorizedError } from "../utils/errorResponse.js";
 
 // @desc    Create new order
 // @route   POST /api/v1/orders
@@ -82,11 +82,26 @@ export const updateOrder = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, updatedOrder });
 });
 
-// @desc    Get all orders for logged user
+// @desc    Get all user's order OR Get all orders in general
 // @route   GET /api/v1/auth/:userId/orders
-// @access  Private
-export const getUserOrders = asyncHandler(async (req, res, next) => {
-  const orders = await Order.find({ user: req.params.userId });
+// @route   GET /api/v1/orders
+// @access  Public/Private-Admin
+export const getOrders = asyncHandler(async (req, res, next) => {
+  let orders;
+  if (req.params.userId) {
+    orders = await Order.find({ user: req.params.userId });
+  } else {
+    if (req.user.role === "admin") {
+      orders = await Order.find({}).populate({
+        path: "user",
+        select: "name id",
+      });
+    } else {
+      return next(
+        new UnAuthorizedError("User is not authorized to access this route")
+      );
+    }
+  }
 
   if (!orders) {
     return next(new NotFoundError("Orders not found"));

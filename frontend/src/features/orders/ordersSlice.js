@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import axiosAuth from "../../utils/axiosAuth";
 
 const initialState = {
+  allOrders: [],
   order: [],
   userOrders: {
     orders: [],
@@ -10,6 +11,7 @@ const initialState = {
   },
   loading: false,
   error: "",
+  isPlaced: false,
 };
 
 // add order to database
@@ -74,12 +76,34 @@ export const getUserOrders = createAsyncThunk(
   }
 );
 
+// get all orders
+export const listOrders = createAsyncThunk(
+  "orders/all",
+  async (_, thunkAPI) => {
+    try {
+      const {
+        data: { orders },
+      } = await axiosAuth.get("/orders");
+
+      return orders;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(errorMessage(error));
+    }
+  }
+);
+
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
   reducers: {
     resetOrder: () => {
       return initialState;
+    },
+    resetIsPlaced: (state) => {
+      return {
+        ...state,
+        isPlaced: false,
+      };
     },
   },
   extraReducers(builder) {
@@ -90,6 +114,7 @@ const ordersSlice = createSlice({
       .addCase(placeOrder.fulfilled, (state, action) => {
         state.loading = false;
         state.order = action.payload;
+        state.isPlaced = true;
         toast.success("Narudžba uspješna");
       })
       .addCase(placeOrder.rejected, (state, action) => {
@@ -128,6 +153,17 @@ const ordersSlice = createSlice({
       .addCase(getUserOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(listOrders.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allOrders = action.payload;
+      })
+      .addCase(listOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
@@ -142,6 +178,6 @@ const errorMessage = (error) => {
   return message;
 };
 
-export const { resetOrder } = ordersSlice.actions;
+export const { resetOrder, resetIsPlaced } = ordersSlice.actions;
 
 export default ordersSlice.reducer;
