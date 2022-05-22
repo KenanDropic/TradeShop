@@ -11,16 +11,17 @@ import {
 import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   getOrderDetails,
+  markOrderAsDelivered,
+  resetIsDelivered,
   updateOrderToPaid,
 } from "../features/orders/ordersSlice";
 import Loader from "../components/Loader";
 import axios from "axios";
 
 const OrderS = () => {
-  //   const navigate = useNavigate();
   const [sdkReady, setSdkReady] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const OrderS = () => {
     order,
     error: ordersError,
     loading,
+    isDelivered,
   } = useSelector((state) => state.orders);
   const {
     orderItems,
@@ -37,6 +39,7 @@ const OrderS = () => {
     shippingAddress,
     paymentMethod,
   } = order;
+  const { user } = useSelector((state) => state.users);
 
   useEffect(() => {
     const paypalScript = async () => {
@@ -51,8 +54,9 @@ const OrderS = () => {
       document.body.appendChild(script);
     };
 
-    if (order?.length === 0 || order?.isPaid === true) {
+    if (order?.length === 0 || order?.isPaid === true || isDelivered) {
       dispatch(getOrderDetails(id));
+      dispatch(resetIsDelivered());
     } else if (!order?.isPaid) {
       if (!window.paypal) {
         paypalScript();
@@ -61,10 +65,14 @@ const OrderS = () => {
       }
     }
     // eslint-disable-next-line
-  }, [id, order?.isPaid, dispatch]);
+  }, [id, dispatch, isDelivered]); // u deps array-u je bio i property order?.isPaid
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(updateOrderToPaid([id, paymentResult]));
+  };
+
+  const handleDeliver = () => {
+    dispatch(markOrderAsDelivered(id));
   };
 
   return order.length === 0 || loading === true ? (
@@ -117,7 +125,20 @@ const OrderS = () => {
                   )}
                 </ListGroupItem>
               )}
-              <ListGroupItem>DEBIT OR CREDIT CARD</ListGroupItem>
+              <ListGroupItem>
+                {order?.isPaid &&
+                  user?.role === "admin" &&
+                  !order?.isDelivered && (
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      variant="dark"
+                      onClick={handleDeliver}
+                    >
+                      Označi kao isporučeno
+                    </Button>
+                  )}
+              </ListGroupItem>
             </ListGroup>
           </Card>
         </Col>

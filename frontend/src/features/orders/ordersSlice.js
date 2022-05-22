@@ -12,6 +12,7 @@ const initialState = {
   loading: false,
   error: "",
   isPlaced: false,
+  isDelivered: false,
 };
 
 // add order to database
@@ -30,7 +31,7 @@ export const placeOrder = createAsyncThunk(
 );
 // get order details
 export const getOrderDetails = createAsyncThunk(
-  "orders/createOrder",
+  "orders/getOrderDetails",
   async (id, thunkAPI) => {
     try {
       const {
@@ -92,6 +93,21 @@ export const listOrders = createAsyncThunk(
   }
 );
 
+// mark order as delivered
+export const markOrderAsDelivered = createAsyncThunk(
+  "orders/delivered",
+  async (id, thunkAPI) => {
+    try {
+      const {
+        data: { updatedOrder },
+      } = await axiosAuth.put(`/orders/${id}/delivered`);
+      return updatedOrder;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(errorMessage(error));
+    }
+  }
+);
+
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
@@ -103,6 +119,12 @@ const ordersSlice = createSlice({
       return {
         ...state,
         isPlaced: false,
+      };
+    },
+    resetIsDelivered: (state) => {
+      return {
+        ...state,
+        isDelivered: false,
       };
     },
   },
@@ -143,6 +165,18 @@ const ordersSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      .addCase(markOrderAsDelivered.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(markOrderAsDelivered.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isDelivered = true;
+        state.order = action.payload;
+      })
+      .addCase(markOrderAsDelivered.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(getUserOrders.pending, (state) => {
         state.loading = true;
       })
@@ -178,6 +212,7 @@ const errorMessage = (error) => {
   return message;
 };
 
-export const { resetOrder, resetIsPlaced } = ordersSlice.actions;
+export const { resetOrder, resetIsPlaced, resetIsDelivered } =
+  ordersSlice.actions;
 
 export default ordersSlice.reducer;
