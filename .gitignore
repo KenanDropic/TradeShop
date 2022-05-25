@@ -13,7 +13,7 @@ node_modules/
 /build
 
 # backend - db - seeder
-/backend/data/
+backend/data/
 
 # misc
 .DS_Store
