@@ -8,18 +8,17 @@ import {
   deleteProduct,
   listProducts,
 } from "../../features/products/productsSlice";
+import PagePagination from "../../components/PagePagination";
 
 const AllProductsS = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { products, loading, error, isDeleted } = useSelector(
-    (state) => state.products
-  );
-
+  const { products, loading, error, isDeleted, searchKeyword, page } =
+    useSelector((state) => state.products);
   useEffect(() => {
-    dispatch(listProducts());
+    dispatch(listProducts([page, searchKeyword]));
     // eslint-disable-next-line
-  }, [dispatch, isDeleted]);
+  }, [dispatch, isDeleted, page, searchKeyword]);
 
   const handleDelete = (id) => {
     if (window.confirm("Da li ste sigurni da želite obrisati proizvod")) {
@@ -89,6 +88,9 @@ const AllProductsS = () => {
                   })}
               </tbody>
             </Table>
+          </Row>
+          <Row>
+            <PagePagination />
           </Row>
         </>
       )}

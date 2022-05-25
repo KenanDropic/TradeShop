@@ -6,19 +6,29 @@ import { toast } from "react-toastify";
 const initialState = {
   products: [],
   product: null,
+  pages: 0,
+  page: 1,
+  pagination: {},
   loading: false,
   error: null,
   isDeleted: false,
   isCreated: false,
   isEdited: false,
+  searchKeyword: "",
 };
 
 // get all products
 export const listProducts = createAsyncThunk(
   "products/listProducts",
-  async (_, thunkAPI) => {
+  async ([currPage, searchKyw], thunkAPI) => {
+    let page = [currPage, searchKyw][0];
+    let search = [currPage, searchKyw][1];
     try {
-      const { data } = await axios.get("/api/v1/products");
+      let url = `/api/v1/products?page=${page}`;
+      if (search !== "") {
+        url = url + `&search=${search}`;
+      }
+      const { data } = await axios.get(url);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
@@ -96,6 +106,19 @@ const productsSlice = createSlice({
         isEdited: false,
       };
     },
+    resetQuery: (state) => {
+      return {
+        ...state,
+        searchKeyword: "",
+        page: 1,
+      };
+    },
+    setSearchKeyword: (state, action) => {
+      state.searchKeyword = action.payload;
+    },
+    setPageNumber: (state, action) => {
+      state.page = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -103,9 +126,13 @@ const productsSlice = createSlice({
         state.loading = true;
       })
       .addCase(listProducts.fulfilled, (state, action) => {
-        const { products } = action.payload;
+        const { data, pages, pagination, page } = action.payload;
         state.loading = false;
-        state.products = products;
+        state.products = data;
+        state.pagination = pagination;
+        state.pages = pages;
+        state.page = page;
+        state.error = "";
       })
       .addCase(listProducts.rejected, (state, action) => {
         state.loading = false;
@@ -118,6 +145,7 @@ const productsSlice = createSlice({
         const { product } = action.payload;
         state.loading = false;
         state.product = product;
+        state.error = "";
       })
       .addCase(getSingleProduct.rejected, (state, action) => {
         state.loading = false;
@@ -129,6 +157,7 @@ const productsSlice = createSlice({
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.isDeleted = true;
+        state.error = "";
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.loading = false;
@@ -141,6 +170,7 @@ const productsSlice = createSlice({
         state.loading = false;
         state.isCreated = true;
         state.product = action.payload;
+        state.error = "";
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
@@ -153,6 +183,8 @@ const productsSlice = createSlice({
         state.loading = false;
         state.isEdited = true;
         state.product = action.payload;
+        state.error = "";
+
         toast.success("Ažuriranje uspješno!");
       })
       .addCase(editProduct.rejected, (state, action) => {
@@ -172,6 +204,7 @@ const errorMessage = (error) => {
   return message;
 };
 
-export const { resetIsStates } = productsSlice.actions;
+export const { resetIsStates, setSearchKeyword, resetQuery, setPageNumber } =
+  productsSlice.actions;
 
 export default productsSlice.reducer;

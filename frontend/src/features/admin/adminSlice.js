@@ -4,24 +4,23 @@ import { toast } from "react-toastify";
 
 const initialState = {
   users: null,
-  products: null,
-  orders: null,
   userToEdit: {},
   loading: false,
   error: "",
   isDeleted: false,
+  pages: 0,
+  page: 1,
+  pagination: {},
 };
 
 // get all users
 export const getAllUsers = createAsyncThunk(
   "users/all",
-  async (_, thunkAPI) => {
+  async ([currPage, kyw], thunkAPI) => {
     try {
-      const {
-        data: { users },
-      } = await axiosAuth.get("/users");
-
-      return users;
+      let page = [currPage, kyw][0];
+      const { data } = await axiosAuth.get(`/users?${page}`);
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
     }
@@ -86,8 +85,13 @@ const adminSlice = createSlice({
         state.loading = true;
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
+        const { pagination, page, pages, data } = action.payload;
         state.loading = false;
-        state.users = action.payload;
+        state.users = data;
+        state.pagination = pagination;
+        state.page = page;
+        state.pages = pages;
+        state.error = "";
       })
       .addCase(getAllUsers.rejected, (state, action) => {
         state.loading = false;
@@ -99,6 +103,8 @@ const adminSlice = createSlice({
       .addCase(deleteUser.fulfilled, (state) => {
         state.loading = false;
         state.isDeleted = true;
+        state.error = "";
+
         toast.success("Korisnik obrisan");
       })
       .addCase(deleteUser.rejected, (state, action) => {
@@ -112,6 +118,7 @@ const adminSlice = createSlice({
       .addCase(getSingleUser.fulfilled, (state, action) => {
         state.loading = false;
         state.userToEdit = action.payload;
+        state.error = "";
       })
       .addCase(getSingleUser.rejected, (state, action) => {
         state.loading = false;
@@ -122,6 +129,8 @@ const adminSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = "";
+
         toast.success("Ažurirali ste korisnika");
       })
       .addCase(updateUser.rejected, (state, action) => {
