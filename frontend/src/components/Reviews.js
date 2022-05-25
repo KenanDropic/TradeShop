@@ -27,7 +27,7 @@ const Reviews = ({ productId }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      rating: 1,
+      rating: "",
       comment: "",
     },
   });
@@ -53,10 +53,7 @@ const Reviews = ({ productId }) => {
                   <p>
                     <strong>{review.name}</strong>
                   </p>
-                  <Rating
-                    value={review.rating}
-                    text={`${String(reviews?.length)} recenzija`}
-                  />
+                  <Rating value={review.rating} text={""} />
                   <p>{review.createdAt.substring(0, 10)}</p>
                   <p>{review.comment}</p>
                 </ListGroup.Item>
@@ -72,16 +69,21 @@ const Reviews = ({ productId }) => {
                 >
                   <Form.Group>
                     <Form.Label>Ocjena</Form.Label>
-                    <Form.Control as="select" {...register("rating")}>
+                    <Form.Control
+                      as="select"
+                      {...register("rating", {
+                        required: [true, "Polje je obavezno"],
+                      })}
+                    >
                       {ratings.map((rating) => {
                         return (
                           <option value={rating} key={rating}>
                             {rating} -{" "}
                             {`${
                               rating === 1
-                                ? "Loše"
+                                ? "Grozno"
                                 : rating === 2
-                                ? "Solidno"
+                                ? "Loše"
                                 : rating === 3
                                 ? "Dobro"
                                 : rating === 4
@@ -92,14 +94,22 @@ const Reviews = ({ productId }) => {
                         );
                       })}
                     </Form.Control>
+                    <span style={{ color: "red", display: "block" }}>
+                      {errors.rating?.message}
+                    </span>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Komentar</Form.Label>
                     <Form.Control
-                      {...register("comment")}
+                      {...register("comment", {
+                        required: [true, "Polje je obavezno"],
+                      })}
                       as="textarea"
                       row="3"
                     ></Form.Control>
+                    <span style={{ color: "red", display: "block" }}>
+                      {errors.comment?.message}
+                    </span>
                   </Form.Group>
                   <Button type="submit" className="btn mt-3">
                     Dodajte recenziju

@@ -137,6 +137,8 @@ const ordersSlice = createSlice({
         state.loading = false;
         state.order = action.payload;
         state.isPlaced = true;
+        state.error = "";
+
         toast.success("Narudžba uspješna");
       })
       .addCase(placeOrder.rejected, (state, action) => {
@@ -149,6 +151,8 @@ const ordersSlice = createSlice({
       .addCase(getOrderDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.order = action.payload;
+        state.error = "";
+
       })
       .addCase(getOrderDetails.rejected, (state, action) => {
         state.loading = false;
@@ -160,6 +164,8 @@ const ordersSlice = createSlice({
       .addCase(updateOrderToPaid.fulfilled, (state, action) => {
         state.loading = false;
         state.order = action.payload;
+        state.error = "";
+
       })
       .addCase(updateOrderToPaid.rejected, (state, action) => {
         state.loading = false;
@@ -172,6 +178,8 @@ const ordersSlice = createSlice({
         state.loading = false;
         state.isDelivered = true;
         state.order = action.payload;
+        state.error = "";
+
       })
       .addCase(markOrderAsDelivered.rejected, (state, action) => {
         state.loading = false;
@@ -183,6 +191,8 @@ const ordersSlice = createSlice({
       .addCase(getUserOrders.fulfilled, (state, action) => {
         state.loading = false;
         state.userOrders = action.payload;
+        state.error = "";
+
       })
       .addCase(getUserOrders.rejected, (state, action) => {
         state.loading = false;
@@ -194,6 +204,8 @@ const ordersSlice = createSlice({
       .addCase(listOrders.fulfilled, (state, action) => {
         state.loading = false;
         state.allOrders = action.payload;
+        state.error = "";
+
       })
       .addCase(listOrders.rejected, (state, action) => {
         state.loading = false;

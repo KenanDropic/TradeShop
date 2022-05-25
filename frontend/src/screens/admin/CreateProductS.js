@@ -156,8 +156,8 @@ const CreateProductS = () => {
             {...register("countInStock", {
               required: "Polje je obavezno",
               min: {
-                value: 5,
-                message: "Vrijednost ne može biti manja od 5",
+                value: 0,
+                message: "Vrijednost ne može biti manja od 0",
               },
             })}
             type="number"

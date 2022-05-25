@@ -12,7 +12,8 @@ import FormContainer from "../components/FormContainer";
 import MultiStep from "../components/MultiStep";
 import Message from "../components/Message";
 import { useNavigate } from "react-router-dom";
-import { placeOrder } from "../features/orders/ordersSlice";
+import { placeOrder, resetIsPlaced } from "../features/orders/ordersSlice";
+import { useEffect } from "react";
 
 const PlaceOrderS = () => {
   const navigate = useNavigate();
@@ -22,13 +23,7 @@ const PlaceOrderS = () => {
   );
   const { country, address, postalCode } = shippingAddress;
   const { user } = useSelector((state) => state.users);
-  const { order } = useSelector((state) => state.orders);
-
-  if (!shippingAddress.address) {
-    return navigate("/shippging");
-  } else if (!paymentMethod) {
-    return navigate("/payment");
-  }
+  const { order, isPlaced } = useSelector((state) => state.orders);
 
   // add zero's if there is no decimals
   const addDecimals = (num) => {
@@ -59,9 +54,21 @@ const PlaceOrderS = () => {
     user: user?._id,
   };
 
+  useEffect(() => {
+    if (!shippingAddress.address) {
+      return navigate("/shippging");
+    } else if (!paymentMethod) {
+      return navigate("/payment");
+    }
+
+    if (isPlaced) {
+      return navigate(`/orders/${order._id}`);
+    }
+  }, [isPlaced]);
+
   const handlePlaceorder = () => {
     dispatch(placeOrder(orderDetails));
-    navigate(`/orders/${order._id}`);
+    dispatch(resetIsPlaced());
   };
 
   return (

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { resetOrder } from "../features/orders/ordersSlice";
 import { resetAdminState } from "../features/admin/adminSlice";
+import { resetQuery } from "../features/products/productsSlice";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Header = () => {
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container fluid>
-          <LinkContainer to="/">
+          <LinkContainer to="/" onClick={() => dispatch(resetQuery())}>
             <Navbar.Brand>Trade Shop</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />

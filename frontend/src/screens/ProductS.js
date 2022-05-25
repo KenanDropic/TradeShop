@@ -15,6 +15,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { getSingleProduct } from "../features/products/productsSlice";
 import { addToCart } from "../features/cart/cartSlice";
+import Reviews from "../components/Reviews";
 
 const ProductS = () => {
   const [qty, setQty] = useState(1);
@@ -48,32 +49,35 @@ const ProductS = () => {
       ) : (
         <>
           <Row>
-            <Col md={6}>
+            <Col sm="6" md="4" lg="5" xl="4" xxl="4">
               <Image src={product.image} alt="image" fluid />
             </Col>
 
-            <Col md={3}>
+            <Col sm="6" md="4" lg="4" xl="5">
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h3>{product.name}</h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Rating
-                    value={product.rating}
+                    value={product.averageRating}
                     text={
-                      product.numReviews === 0
-                        ? "0 reviews"
-                        : product.numReviews === 1
-                        ? `${1} review`
-                        : `${product.numReviews} reviews`
+                      product.numOfReviews === 0
+                        ? ""
+                        : product.numOfReviews === 2 ||
+                          product.numOfReviews === 3 ||
+                          product.numOfReviews === 4
+                        ? `${product.numOfReviews} recenzije`
+                        : `${product.numOfReviews} recenzija`
                     }
                   />
                 </ListGroup.Item>
-                <ListGroup.Item>Cijena: {product.price} KM</ListGroup.Item>
-                <ListGroup.Item>Opis: {product.description}</ListGroup.Item>
+                <ListGroup.Item>
+                  <strong>Cijena: </strong> {product.price} KM
+                </ListGroup.Item>
               </ListGroup>
             </Col>
-            <Col md={3}>
+            <Col sm="12" md="4" lg="3" xl="3" className="mt-3">
               <Card>
                 <ListGroup variant="flush">
                   <ListGroup.Item>
@@ -133,6 +137,18 @@ const ProductS = () => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
+            </Col>
+          </Row>
+          <Row className="mt-3">
+            <Col xs="12" sm="12" md="4" lg="5" xl="4" xxl="4">
+              <ListGroup>
+                <ListGroup.Item>
+                  <strong>Opis: </strong> {product.description}
+                </ListGroup.Item>
+              </ListGroup>
+            </Col>
+            <Col md="8" lg="7" xl="8" xxl="8" className="mt-2">
+              <Reviews productId={id} />
             </Col>
           </Row>
         </>

@@ -4,7 +4,7 @@ import Rating from "./Rating";
 
 const Product = ({ product }) => {
   return (
-    <Card className="my-3 p-3 rounded">
+    <Card className="my-1 p-3 rounded h-100">
       <Link to={`products/${product._id}`}>
         <Card.Img src={product.image} variant="top" />
       </Link>
@@ -19,11 +19,15 @@ const Product = ({ product }) => {
         <Card.Text as="div">
           {/* {console.log(product.rating)} */}
           <Rating
-            value={product.rating}
+            value={product.averageRating}
             text={
-              product.numReviews > 1
-                ? `${product.numReviews} reviews`
-                : `${product.numReviews} review`
+              product.numOfReviews === 0
+                ? ""
+                : product.numOfReviews === 2 ||
+                  product.numOfReviews === 3 ||
+                  product.numOfReviews === 4
+                ? `${product.numOfReviews} recenzije`
+                : `${product.numOfReviews} recenzija`
             }
           />
         </Card.Text>

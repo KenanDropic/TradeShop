@@ -5,14 +5,18 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../features/products/productsSlice";
+import Search from "../components/Search";
+import PagePagination from "../components/PagePagination";
 
 const HomeS = () => {
   const dispatch = useDispatch();
-  const { loading, products, error } = useSelector((state) => state.products);
+  const { loading, products, error, searchKeyword, page } = useSelector(
+    (state) => state.products
+  );
 
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts([page, searchKeyword]));
+  }, [dispatch, searchKeyword, page]);
 
   return (
     <>
@@ -22,15 +26,24 @@ const HomeS = () => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Row>
-          {products.map((product, idx) => {
-            return (
-              <Col key={idx} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            );
-          })}
-        </Row>
+        <>
+          <Search />
+          {products.length === 0 && (
+            <>
+              <Message variant="info">Nema traženih proizvoda</Message>
+            </>
+          )}
+          <Row>
+            {products.map((product, idx) => {
+              return (
+                <Col key={idx} sm={12} md={6} lg={4} xl={3} className="mb-3">
+                  <Product product={product} />
+                </Col>
+              );
+            })}
+            <PagePagination />
+          </Row>
+        </>
       )}
     </>
   );

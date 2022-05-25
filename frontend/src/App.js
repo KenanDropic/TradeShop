@@ -16,6 +16,8 @@ import {
   AllProductsS,
   EditUserS,
   UnauthorizedS,
+  CreateProductS,
+  EditProductS,
 } from "./screens/index";
 import SharedLayout from "./components/SharedLayout";
 import PrivateRoute from "./components/PrivateRoute";
@@ -29,6 +31,12 @@ const App = () => {
         <Routes>
           <Route exact path="/" element={<SharedLayout />}>
             <Route index element={<HomeS />} />
+            <Route exact path="/page/:pageNum" element={<HomeS />} />
+            <Route
+              exact
+              path="/search/:keyword/page/:pageNum"
+              element={<HomeS />}
+            />
             <Route exact path="/products/:id" element={<ProductS />} />
             <Route exact path="/cart" element={<CartS />} />
             <Route exact path="/cart/:id" element={<CartS />} />
@@ -52,6 +60,16 @@ const App = () => {
                 exact
                 path="/admin/users/:id/edit"
                 element={<EditUserS />}
+              />
+              <Route
+                exact
+                path="/admin/products/create"
+                element={<CreateProductS />}
+              />
+              <Route
+                exact
+                path="/admin/products/:id/edit"
+                element={<EditProductS />}
               />
             </Route>
           </Route>

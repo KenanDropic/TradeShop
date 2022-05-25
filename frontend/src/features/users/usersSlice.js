@@ -132,6 +132,7 @@ const usersSlice = createSlice({
         state.user = action.payload;
         state.isLogged = true;
         state.loading = false;
+        state.error = "";
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.isLogged = false;
@@ -143,6 +144,7 @@ const usersSlice = createSlice({
       })
       .addCase(updateUserDetails.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = "";
         state.user = action.payload;
         toast.success("Ažuriranje profila uspješno");
       })
