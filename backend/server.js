@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import colors from "colors";
 import { notFound, errorHandler } from "./middleware/error.js";
 import path from "path";
+import morgan from "morgan";
 
 // Load env variables
 dotenv.config();
@@ -17,9 +18,14 @@ import authRoutes from "./routes/authRoutes.js";
 import orderRoutes from "./routes/ordersRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import reviewsRoutes from "./routes/reviewsRoutes.js";
 
 // Express initialization
 const app = express();
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 // Body parser
 app.use(express.json());
@@ -33,6 +39,7 @@ app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/users", usersRoutes);
+app.use("/api/v1/reviews", reviewsRoutes);
 app.use("/api/v1/upload", uploadRoutes);
 
 // get paypal config

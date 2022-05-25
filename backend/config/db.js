@@ -6,6 +6,7 @@ const connectDB = async () => {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });
+    mongoose.syncIndexes();
     console.log(
       `MongoDB Connected: ${conn.connection.host}`.cyan.underline.bold
     );

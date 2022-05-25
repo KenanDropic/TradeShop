@@ -2,18 +2,29 @@ const users = [
   {
     name: "Admin User",
     email: "admin@gmail.com",
-    password: "123456",
-    isAdmin: true,
+    password: "Test123!",
+    role: "admin",
   },
   {
-    name: "Kenan Dropić",
+    name: "Kenan",
     email: "dropic@gmail.com",
-    password: "123456",
+    password: "Test123!",
   },
   {
-    name: "Edvin Cerić",
-    email: "ceric@gmail.com",
-    password: "123456",
+    name: "Edvin",
+    email: "edvin@gmail.com",
+    password: "Test123!",
+  },
+  {
+    name: "test",
+    email: "test@gmail.com",
+    password: "Test123!",
+    role: "admin",
+  },
+  {
+    name: "dummy3",
+    email: "dummy@gmail.com",
+    password: "Test123!",
   },
 ];
 
