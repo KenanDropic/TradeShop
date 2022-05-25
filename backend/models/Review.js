@@ -25,16 +25,16 @@ const ReviewSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Product",
       required: true,
-      unique: false,
     },
   },
   { timestamps: true }
 );
 
 // dozvoli korisniku 1 recenziju po produktu
-ReviewSchema.index({ user: 1 }, { unique: true });
+ReviewSchema.index({ product: 1, user: 1 }, { unique: true });
 
-ReviewSchema.statics.getAverageRating = async function (productID) {
+// calc average rating for product and get total number of product reviews
+ReviewSchema.statics.getAvgRatingAndNumOfReviews = async function (productID) {
   const obj = await this.aggregate([
     {
       $match: { product: productID },
@@ -43,6 +43,7 @@ ReviewSchema.statics.getAverageRating = async function (productID) {
       $group: {
         _id: "$product",
         avgRating: { $avg: "$rating" },
+        totalReviews: { $count: {} },
       },
     },
   ]);
@@ -50,6 +51,7 @@ ReviewSchema.statics.getAverageRating = async function (productID) {
   try {
     await this.model("Product").findByIdAndUpdate(productID, {
       averageRating: obj[0].avgRating,
+      numOfReviews: obj[0].totalReviews,
     });
   } catch (error) {
     console.log(error);
@@ -57,9 +59,9 @@ ReviewSchema.statics.getAverageRating = async function (productID) {
 };
 
 ReviewSchema.post("save", function () {
-  this.constructor.getAverageRating(this.product);
+  this.constructor.getAvgRatingAndNumOfReviews(this.product);
 });
 ReviewSchema.pre("remove", function () {
-  this.constructor.getAverageRating(this.product);
+  this.constructor.getAvgRatingAndNumOfReviews(this.product);
 });
 export default mongoose.model("Review", ReviewSchema);
