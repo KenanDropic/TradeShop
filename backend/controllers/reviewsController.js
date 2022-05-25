@@ -3,6 +3,25 @@ import asyncHandler from "express-async-handler";
 import { NotFoundError } from "../utils/errorResponse.js";
 import Review from "../models/Review.js";
 
+// @desc    Get Product Reviews
+// @route   GET /api/v1/products/:id/reviews
+// @access  Private
+export const getProductReviews = asyncHandler(async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return next(new NotFoundError("Product not found"));
+  }
+
+  const reviews = await Review.find({ product: req.params.id });
+
+  if (!reviews) {
+    return next(new NotFoundError("No reviews for this product"));
+  }
+
+  res.status(200).json({ success: true, count: reviews.length, reviews });
+});
+
 // @desc    Create New Review
 // @route   POST /api/v1/products/:id/reviews
 // @access  Private
@@ -32,15 +51,7 @@ export const deleteReview = asyncHandler(async (req, res, next) => {
     return next(new NotFoundError("Review not found"));
   }
 
-  console.log(review);
+  await review.remove();
 
-  //   if (isReviewed) {
-  //     return next(new BadRequestError("User has already reviewed this product"));
-  //   }
-
-  //   product.reviews.push(review);
-
-  //   await product.save();
-
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, data: {} });
 });

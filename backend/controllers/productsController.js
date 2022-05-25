@@ -6,11 +6,7 @@ import { NotFoundError } from "../utils/errorResponse.js";
 // @route   GET /api/v1/products
 // @access  Public
 export const getProducts = asyncHandler(async (req, res, next) => {
-  const products = await Product.find({});
-  if (!products) {
-    return next(new NotFoundError("Product not found"));
-  }
-  res.status(200).json({ success: true, products });
+  res.status(200).json(res.advRes);
 });
 
 // @desc    Get single product

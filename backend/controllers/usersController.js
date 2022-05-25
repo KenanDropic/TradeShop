@@ -6,13 +6,7 @@ import { BadRequestError, NotFoundError } from "../utils/errorResponse.js";
 // @route   GET /api/v1/users
 // @access  Private/ADMIN
 export const getUsers = asyncHandler(async (req, res, next) => {
-  const users = await User.find({});
-
-  if (!users) {
-    return next(new NotFoundError("User not found"));
-  }
-
-  res.status(200).json({ success: true, users });
+  res.status(200).json(res.advRes);
 });
 
 // @desc    Get single user
