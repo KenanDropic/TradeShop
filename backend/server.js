@@ -5,6 +5,11 @@ import colors from "colors";
 import { notFound, errorHandler } from "./middleware/error.js";
 import path from "path";
 import morgan from "morgan";
+import mongoSanitize from "express-mongo-sanitize";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import hpp from "hpp";
+import xss from "xss-clean";
 
 // Load env variables
 dotenv.config();
@@ -46,6 +51,16 @@ app.use("/api/v1/upload", uploadRoutes);
 app.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
+
+app.use(mongoSanitize());
+app.use(helmet());
+app.use(xss());
+app.use(hpp());
+
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 100,
+});
 
 // Set static folder,so we can go to any domain and do  /our image name and access image in browser
 const __dirname = path.resolve();
