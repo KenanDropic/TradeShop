@@ -1,6 +1,6 @@
 # TradeShop
 
-![Markdown Logo](/uploads/TradeShop.jpg)
+![Markdown Logo](/uploads/image-1653579457731.jpg)
 
 ---
 
