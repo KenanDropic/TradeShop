@@ -52,4 +52,14 @@ const ProductSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Cascade delete
+ProductSchema.pre("remove", async function (next) {
+  console.log(
+    `Removing product means removing reviews for product: ${this._id}`
+  );
+  await this.model("Review").deleteMany({ product: this._id });
+
+  next();
+});
+
 export default mongoose.model("Product", ProductSchema);
