@@ -4,6 +4,7 @@ import {
   loginUser,
   getLoggedUser,
   updateUserProfile,
+  confirmEmail,
 } from "../controllers/authController.js";
 import { authenticate } from "../middleware/auth.js";
 import ordersRouter from "./ordersRoutes.js";
@@ -19,5 +20,6 @@ router
   .route("/profile")
   .get(authenticate, getLoggedUser)
   .put(authenticate, updateUserProfile);
+router.get("/confirmEmail", confirmEmail);
 
 export default router;

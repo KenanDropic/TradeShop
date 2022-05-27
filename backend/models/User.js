@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -17,11 +18,15 @@ const UserSchema = new mongoose.Schema(
         "Please add a valid email",
       ],
     },
+    isEmailConfirmed: {
+      type: Boolean,
+      default: false,
+    },
     password: {
       type: String,
       required: [true, "Please add a password"],
       minlength: 6,
-      select: false, //znači da password polje neće biti vidljivo kada se user bude dohvatao putem API-a
+      select: false,
     },
     role: {
       type: String,
@@ -30,6 +35,8 @@ const UserSchema = new mongoose.Schema(
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+    confirmEmailToken: String,
+    confirmEmailExpire: Date,
   },
   { timestamps: true }
 );
@@ -55,5 +62,26 @@ UserSchema.methods.getSignedJWT = function () {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };
+
+// confirm email token
+UserSchema.methods.generateVerificationToken = function (next) {
+  const emailToken = crypto.randomBytes(20).toString("hex");
+
+  this.confirmEmailToken = crypto
+    .createHash("sha256")
+    .update(emailToken)
+    .digest("hex");
+
+  const emailTokenExtend = crypto.randomBytes(100).toString("hex");
+  const confirmTokenCombined = `${emailToken}.${emailTokenExtend}`;
+
+  this.confirmEmailExpire = Date.now() + 10 * 60 * 1000;
+
+  return confirmTokenCombined;
+};
+
+// UserSchema.methods.getResetPasswordToken = function () {
+//   const resetToken = await crypto.randomBytes(20).toString('hex')
+// }
 
 export default mongoose.model("User", UserSchema);

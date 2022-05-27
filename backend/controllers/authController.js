@@ -2,9 +2,12 @@ import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
 import {
   BadRequestError,
+  ErrorResponse,
   NotFoundError,
   UnAuthenticatedError,
 } from "../utils/errorResponse.js";
+import sendEmail from "../utils/sendEmail.js";
+import crypto from "crypto";
 
 // @desc    Register User
 // @route   POST /api/v1/auth/register
@@ -22,9 +25,34 @@ export const registerUser = asyncHandler(async (req, res, next) => {
     return next(new BadRequestError("User already exists"), 400);
   }
 
-  const user = await User.create(req.body);
+  const user = await new User(req.body);
 
-  sendTokenResponse(user, 201, res);
+  const verificationToken = user.generateVerificationToken();
+
+  const url = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/auth/confirmEmail?token=${verificationToken}`;
+
+  user.save({ validateBeforeSave: false });
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "Email confirmation token",
+      html: `<h4>${user.name},hvala što ste se registrovali na naš sajt.</h4> Kliknite ovdje <a href="${url}"<a/>da potvrdite vaš email.`,
+    });
+  } catch (error) {
+    console.log(error);
+
+    user.confirmEmailToken = undefined;
+    user.confirmEmailExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    return next(new ErrorResponse("Email could not be sent"));
+  }
+
+  sendTokenResponse(user, 201, res, `Email sent to ${user.email}`);
 });
 
 // @desc    Login User
@@ -41,6 +69,10 @@ export const loginUser = asyncHandler(async (req, res, next) => {
 
   if (!user) {
     return next(new NotFoundError("User not found"));
+  }
+
+  if (!user.isEmailConfirmed) {
+    return next(new UnAuthenticatedError("Please confirm your email to login"));
   }
 
   const doesMatch = await user.matchPasswords(password);
@@ -113,9 +145,48 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true });
 });
 
+// @desc    Verfiy Account
+// @route   GET /api/v1/auth/confirmEmail
+// @access  Public
+export const confirmEmail = asyncHandler(async (req, res, next) => {
+  const { token } = req.query;
+
+  if (!token) {
+    return next(BadRequestError("Invalid token"));
+  }
+
+  const splitToken = token.split(".")[0];
+
+  // Get hashed token
+  const confirmEmailToken = crypto
+    .createHash("sha256")
+    .update(splitToken)
+    .digest("hex");
+
+  const user = await User.findOne({
+    confirmEmailToken,
+    confirmEmailExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new BadRequestError("Invalid token"));
+  }
+
+  // set isVerified to true
+  user.isEmailConfirmed = true;
+  user.confirmEmailToken = undefined;
+  user.confirmEmailExpire = undefined;
+
+  await user.save({ validateBeforeSave: false });
+
+  sendTokenResponse(user, 200, res);
+});
+
 // send token as response
-const sendTokenResponse = (user, statusCode, response) => {
+const sendTokenResponse = (user, statusCode, response, msg) => {
   const token = user.getSignedJWT();
 
-  response.status(statusCode).json({ success: true, token });
+  response
+    .status(statusCode)
+    .json({ success: true, token, message: msg !== "" ? msg : undefined });
 };
