@@ -10,6 +10,7 @@ export { default as PlaceOrderS } from "./PlaceOrderS";
 export { default as OrderS } from "./OrderS";
 export { default as ErrorS } from "./ErrorS";
 export { default as UnauthorizedS } from "./UnauthorizedS";
+export { default as ConfirmEmailS } from "./ConfirmEmailS";
 export { default as AllUsersS } from "./admin/AllUsersS";
 export { default as EditUserS } from "./admin/EditUserS";
 export { default as AllOrdersS } from "./admin/AllOrdersS";
