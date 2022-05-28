@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../features/products/productsSlice";
 import Search from "../components/Search";
 import PagePagination from "../components/PagePagination";
+import HelmetM from "../components/HelmetM";
 
 const HomeS = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const HomeS = () => {
 
   return (
     <>
+      <HelmetM />
       <h1>Najnoviji proizvodi</h1>
       {loading ? (
         <Loader />
@@ -36,7 +38,7 @@ const HomeS = () => {
           <Row>
             {products.map((product, idx) => {
               return (
-                <Col key={idx} sm={12} md={6} lg={4} xl={3} className="mb-3">
+                <Col key={idx} sm={12} md={4} lg={3} xl={3} className="mb-3">
                   <Product product={product} />
                 </Col>
               );

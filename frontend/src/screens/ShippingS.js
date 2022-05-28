@@ -11,7 +11,7 @@ import MultiStep from "../components/MultiStep";
 
 const ShippingS = () => {
   const dispatch = useDispatch();
-  const { loading, error, isLogged } = useSelector((state) => state.users);
+  const { loading, error } = useSelector((state) => state.users);
   const { shippingAddress } = useSelector((state) => state.cart);
 
   const navigate = useNavigate();
@@ -30,6 +30,9 @@ const ShippingS = () => {
   });
 
   useEffect(() => {
+    if (!JSON.parse(localStorage.getItem("cartItems"))) {
+      return navigate("/");
+    }
     if (shippingAddress.length > 0) {
       reset(shippingAddress);
     }

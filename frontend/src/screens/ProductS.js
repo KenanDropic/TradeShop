@@ -16,6 +16,7 @@ import Message from "../components/Message";
 import { getSingleProduct } from "../features/products/productsSlice";
 import { addToCart } from "../features/cart/cartSlice";
 import Reviews from "../components/Reviews";
+import HelmetM from "../components/HelmetM";
 
 const ProductS = () => {
   const [qty, setQty] = useState(1);
@@ -48,6 +49,7 @@ const ProductS = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
+          <HelmetM title={product.name} />
           <Row>
             <Col sm="6" md="4" lg="5" xl="4" xxl="4">
               <Image src={product.image} alt="image" fluid />

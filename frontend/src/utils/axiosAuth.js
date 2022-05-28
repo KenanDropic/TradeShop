@@ -27,8 +27,7 @@ axiosAuth.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      console.log("TO DO - Remove Token");
-      // localStorage.removeItem("token");
+      localStorage.removeItem("token");
     }
     return Promise.reject(error);
   }

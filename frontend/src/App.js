@@ -18,9 +18,11 @@ import {
   UnauthorizedS,
   CreateProductS,
   EditProductS,
+  ConfirmEmailS,
 } from "./screens/index";
 import SharedLayout from "./components/SharedLayout";
 import PrivateRoute from "./components/PrivateRoute";
+import IsEmailConfirmed from "./components/IsEmailConfirmed";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -45,11 +47,13 @@ const App = () => {
 
             {/* Rute koje zahtijevaju autentifikaciju */}
             <Route element={<PrivateRoute allowedRoles={["user", "admin"]} />}>
-              <Route exact path="/profile" element={<ProfileS />} />
-              <Route exact path="/shipping" element={<ShippingS />} />
-              <Route exact path="/payment" element={<PaymentS />} />
-              <Route exact path="/placeorder" element={<PlaceOrderS />} />
-              <Route exact path="/orders/:id" element={<OrderS />} />
+              <Route element={<IsEmailConfirmed />}>
+                <Route exact path="/profile" element={<ProfileS />} />
+                <Route exact path="/shipping" element={<ShippingS />} />
+                <Route exact path="/payment" element={<PaymentS />} />
+                <Route exact path="/placeorder" element={<PlaceOrderS />} />
+                <Route exact path="/orders/:id" element={<OrderS />} />
+              </Route>
             </Route>
             {/* Rute koje zahtijevaju autentifikaciju i autorizaciju(ADMIN) */}
             <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
@@ -74,6 +78,7 @@ const App = () => {
             </Route>
           </Route>
           <Route exact path="/unauthorized" element={<UnauthorizedS />} />
+          <Route exact path="/confirmEmail" element={<ConfirmEmailS />} />
           <Route exact path="*" element={<ErrorS />} />
         </Routes>
       </Router>

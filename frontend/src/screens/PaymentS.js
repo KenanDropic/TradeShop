@@ -5,6 +5,8 @@ import { savePaymentMethod } from "../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import HelmetM from "../components/HelmetM";
+import { useEffect } from "react";
 
 const PaymentS = () => {
   const navigate = useNavigate();
@@ -21,9 +23,11 @@ const PaymentS = () => {
     },
   });
 
-  if (!shippingAddress) {
-    navigate("/shipping");
-  }
+  useEffect(() => {
+    if (Object.keys(shippingAddress).length === 0) {
+      navigate("/shipping");
+    }
+  }, [navigate, shippingAddress]);
 
   const onSubmit = (data) => {
     dispatch(savePaymentMethod(data.paymentMethod));
@@ -32,6 +36,7 @@ const PaymentS = () => {
 
   return (
     <FormContainer>
+      <HelmetM title="Plaćanje" />
       <MultiStep currentStep={3} />
       <h1>PLAĆANJE</h1>
       <Row>

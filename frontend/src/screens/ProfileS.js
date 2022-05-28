@@ -7,6 +7,7 @@ import Message from "../components/Message";
 import { updateUserDetails } from "../features/users/usersSlice";
 import { getUserOrders } from "../features/orders/ordersSlice";
 import { Link } from "react-router-dom";
+import HelmetM from "../components/HelmetM";
 
 const ProfileS = () => {
   // eslint-disable-next-line
@@ -14,9 +15,7 @@ const ProfileS = () => {
 
   const { loading, error, user } = useSelector((state) => state.users);
   const {
-    userOrders: { orders, count },
-    error: ordersError,
-    loading: ordersLoading,
+    userOrders: { orders },
   } = useSelector((state) => state.orders);
   const {
     register,
@@ -57,6 +56,7 @@ const ProfileS = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
+          <HelmetM title={user?.name} />
           <Col sm="3" md="3" xs="3" lg="3" xl="3">
             <h2>Profil Korisnika - {user?.name}</h2>
             <Row>

@@ -70,7 +70,6 @@ const EditProductS = () => {
       setImageUrl(data);
       setUploading(false);
     } catch (error) {
-      console.error(error);
       setUploading(false);
     }
   };

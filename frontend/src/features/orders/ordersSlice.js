@@ -152,7 +152,6 @@ const ordersSlice = createSlice({
         state.loading = false;
         state.order = action.payload;
         state.error = "";
-
       })
       .addCase(getOrderDetails.rejected, (state, action) => {
         state.loading = false;
@@ -164,8 +163,10 @@ const ordersSlice = createSlice({
       .addCase(updateOrderToPaid.fulfilled, (state, action) => {
         state.loading = false;
         state.order = action.payload;
+        localStorage.removeItem("shippingAddress");
+        localStorage.removeItem("pMethod");
+        localStorage.removeItem("cartItems");
         state.error = "";
-
       })
       .addCase(updateOrderToPaid.rejected, (state, action) => {
         state.loading = false;
@@ -179,7 +180,6 @@ const ordersSlice = createSlice({
         state.isDelivered = true;
         state.order = action.payload;
         state.error = "";
-
       })
       .addCase(markOrderAsDelivered.rejected, (state, action) => {
         state.loading = false;
@@ -192,7 +192,6 @@ const ordersSlice = createSlice({
         state.loading = false;
         state.userOrders = action.payload;
         state.error = "";
-
       })
       .addCase(getUserOrders.rejected, (state, action) => {
         state.loading = false;
@@ -205,7 +204,6 @@ const ordersSlice = createSlice({
         state.loading = false;
         state.allOrders = action.payload;
         state.error = "";
-
       })
       .addCase(listOrders.rejected, (state, action) => {
         state.loading = false;

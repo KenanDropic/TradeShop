@@ -20,6 +20,8 @@ import {
 } from "../features/orders/ordersSlice";
 import Loader from "../components/Loader";
 import axios from "axios";
+import HelmetM from "../components/HelmetM";
+import { resetCart } from "../features/cart/cartSlice";
 
 const OrderS = () => {
   const [sdkReady, setSdkReady] = useState(false);
@@ -65,10 +67,11 @@ const OrderS = () => {
       }
     }
     // eslint-disable-next-line
-  }, [id, dispatch, isDelivered]); // u deps array-u je bio i property order?.isPaid
+  }, [id, dispatch, isDelivered, order?.isPaid, order?.length]); // u deps array-u je bio i property order?.isPaid
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(updateOrderToPaid([id, paymentResult]));
+    dispatch(resetCart());
   };
 
   const handleDeliver = () => {
@@ -81,6 +84,7 @@ const OrderS = () => {
     <Message variant="danger">{ordersError}</Message>
   ) : (
     <>
+      <HelmetM title="Narudžba" />
       <Row>
         <h1>NARUDŽBA {id}</h1>
         <Col xxl="3" xl="4" lg="4" md="4" sm="0" xs="0" className="mb-5">
@@ -92,7 +96,9 @@ const OrderS = () => {
               <ListGroup.Item className="m-0 p-2">
                 <Row>
                   <Col>Stavke</Col>
-                  <Col>{totalPrice - taxPrice - shippingPrice} KM</Col>
+                  <Col>
+                    {(totalPrice - taxPrice - shippingPrice).toFixed(2)} KM
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item className="m-0 p-2">
@@ -175,7 +181,9 @@ const OrderS = () => {
                 Metoda: <strong>{paymentMethod}</strong>
               </span>
               {order.isPaid ? (
-                <Message variant="success">Plaćeno - {order.paidAt} </Message>
+                <Message variant="success">
+                  Plaćeno - {order.paidAt.substring(0, 10)}{" "}
+                </Message>
               ) : (
                 <Message variant="info">
                   <strong>Pošiljka nije plaćena</strong>

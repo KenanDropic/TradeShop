@@ -55,16 +55,18 @@ const PlaceOrderS = () => {
   };
 
   useEffect(() => {
-    if (!shippingAddress.address) {
-      return navigate("/shippging");
-    } else if (!paymentMethod) {
+    if (Object.keys(paymentMethod).length < 1) {
+      if (Object.keys(shippingAddress).length === 0) {
+        return navigate("/shipping");
+      }
       return navigate("/payment");
     }
 
     if (isPlaced) {
       return navigate(`/orders/${order._id}`);
     }
-  }, [isPlaced]);
+    // eslint-disable-next-line
+  }, [isPlaced, paymentMethod, navigate]);
 
   const handlePlaceorder = () => {
     dispatch(placeOrder(orderDetails));
@@ -136,7 +138,9 @@ const PlaceOrderS = () => {
             </ListGroup.Item>
             <ListGroup.Item>
               <h4>NAČIN PLAĆANJA</h4>
-              <p>{paymentMethod}</p>
+              <p>
+                {Object.keys(paymentMethod).length > 1 ? paymentMethod : ""}
+              </p>
             </ListGroup.Item>
 
             <ListGroup.Item>

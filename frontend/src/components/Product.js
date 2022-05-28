@@ -17,7 +17,6 @@ const Product = ({ product }) => {
         </Link>
 
         <Card.Text as="div">
-          {/* {console.log(product.rating)} */}
           <Rating
             value={product.averageRating}
             text={

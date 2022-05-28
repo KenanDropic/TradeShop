@@ -59,72 +59,70 @@ const Reviews = ({ productId }) => {
                 </ListGroup.Item>
               );
             })}
-            <ListGroup.Item>
-              <h2 className="mb-1 p-2">Ostavite recenziju</h2>
-              {error && <Message variant="danger">{error}</Message>}
-              {user !== null ? (
-                <Form
-                  className="my-0 py-0 px-2"
-                  onSubmit={handleSubmit(onSubmit)}
-                >
-                  <Form.Group>
-                    <Form.Label>Ocjena</Form.Label>
-                    <Form.Control
-                      as="select"
-                      {...register("rating", {
-                        required: [true, "Polje je obavezno"],
-                      })}
-                    >
-                      {ratings.map((rating) => {
-                        return (
-                          <option value={rating} key={rating}>
-                            {rating} -{" "}
-                            {`${
-                              rating === 1
-                                ? "Grozno"
-                                : rating === 2
-                                ? "Loše"
-                                : rating === 3
-                                ? "Dobro"
-                                : rating === 4
-                                ? "Vrlo dobro"
-                                : "Odlično"
-                            }`}
-                          </option>
-                        );
-                      })}
-                    </Form.Control>
-                    <span style={{ color: "red", display: "block" }}>
-                      {errors.rating?.message}
-                    </span>
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Komentar</Form.Label>
-                    <Form.Control
-                      {...register("comment", {
-                        required: [true, "Polje je obavezno"],
-                      })}
-                      as="textarea"
-                      row="3"
-                    ></Form.Control>
-                    <span style={{ color: "red", display: "block" }}>
-                      {errors.comment?.message}
-                    </span>
-                  </Form.Group>
-                  <Button type="submit" className="btn mt-3">
-                    Dodajte recenziju
-                  </Button>
-                </Form>
-              ) : (
-                <Message variant="info">
-                  <Link to="/login">Prijavite se</Link> kako bi mogli ostaviti
-                  recenziju
-                </Message>
-              )}
-            </ListGroup.Item>
           </ListGroup>
         </Row>
       )}
+
+      <ListGroup.Item>
+        <h2 className="mb-1 p-2">Ostavite recenziju</h2>
+        {error && <Message variant="danger">{error}</Message>}
+        {user !== null ? (
+          <Form className="my-0 py-0 px-2" onSubmit={handleSubmit(onSubmit)}>
+            <Form.Group>
+              <Form.Label>Ocjena</Form.Label>
+              <Form.Control
+                as="select"
+                {...register("rating", {
+                  required: [true, "Polje je obavezno"],
+                })}
+              >
+                {ratings.map((rating) => {
+                  return (
+                    <option value={rating} key={rating}>
+                      {rating} -{" "}
+                      {`${
+                        rating === 1
+                          ? "Grozno"
+                          : rating === 2
+                          ? "Loše"
+                          : rating === 3
+                          ? "Dobro"
+                          : rating === 4
+                          ? "Vrlo dobro"
+                          : "Odlično"
+                      }`}
+                    </option>
+                  );
+                })}
+              </Form.Control>
+              <span style={{ color: "red", display: "block" }}>
+                {errors.rating?.message}
+              </span>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Komentar</Form.Label>
+              <Form.Control
+                {...register("comment", {
+                  required: [true, "Polje je obavezno"],
+                })}
+                as="textarea"
+                row="3"
+              ></Form.Control>
+              <span style={{ color: "red", display: "block" }}>
+                {errors.comment?.message}
+              </span>
+            </Form.Group>
+            <Button type="submit" className="btn mt-3">
+              Dodajte recenziju
+            </Button>
+          </Form>
+        ) : (
+          <Message variant="info">
+            <Link to="/login">Prijavite se</Link> kako bi mogli ostaviti
+            recenziju
+          </Message>
+        )}
+      </ListGroup.Item>
       {/* <Row className="mt-3"></Row> */}
     </>
   );

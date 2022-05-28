@@ -29,9 +29,8 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 
   const verificationToken = user.generateVerificationToken();
 
-  const url = `${req.protocol}://${req.get(
-    "host"
-  )}/api/v1/auth/confirmEmail?token=${verificationToken}`;
+  // frontend url. When user hits this url,we will make request from frontend to backend url(/api/v1/auth/confirmEmail?token=...) to confirm email.
+  const url = `${req.protocol}://localhost:3000/confirmEmail?token=${verificationToken}`;
 
   user.save({ validateBeforeSave: false });
 
@@ -125,8 +124,8 @@ export const getLoggedUser = asyncHandler(async (req, res, next) => {
     _id: currentUser._id,
     name: currentUser.name,
     email: currentUser.email,
-    isAdmin: currentUser.isAdmin,
     role: currentUser.role,
+    isEmailConfirmed: currentUser.isEmailConfirmed,
   };
 
   res.status(200).json({ success: true, user: currentUserCopy });
@@ -152,7 +151,7 @@ export const confirmEmail = asyncHandler(async (req, res, next) => {
   const { token } = req.query;
 
   if (!token) {
-    return next(BadRequestError("Invalid token"));
+    return next(new BadRequestError("Invalid token"));
   }
 
   const splitToken = token.split(".")[0];

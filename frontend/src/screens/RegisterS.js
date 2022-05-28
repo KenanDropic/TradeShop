@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../features/users/usersSlice";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import HelmetM from "../components/HelmetM";
 
 const RegisterS = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,6 +40,7 @@ const RegisterS = () => {
 
   return (
     <FormContainer>
+      <HelmetM title="Registracija" />
       <h1>REGISTRACIJA</h1>
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}

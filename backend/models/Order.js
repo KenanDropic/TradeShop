@@ -71,22 +71,4 @@ const OrderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// OrderSchema.statics.calculateTotalPrice = async function () {
-//   const obj = await this.aggregate([
-//     {
-//       $match: {},
-//     },
-//     {
-//       $group: {
-//         _id: this._id,
-//         totalPrice: { $sum: ["$itemsPrice", "$shippingPrice", "$taxPrice"] },
-//       },
-//     },
-//   ]);
-// };
-
-// OrderSchema.pre("save", function () {
-//   this.constructor.calculateTotalPrice();
-// });
-
 export default mongoose.model("Order", OrderSchema);

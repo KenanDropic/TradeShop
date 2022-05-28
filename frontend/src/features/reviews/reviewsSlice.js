@@ -69,6 +69,7 @@ const adminSlice = createSlice({
         state.loading = false;
         state.isAdded = true;
         state.error = "";
+        toast.success("Dodali ste recenziju");
       })
       .addCase(addReview.rejected, (state, action) => {
         state.loading = false;

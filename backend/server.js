@@ -35,10 +35,6 @@ if (process.env.NODE_ENV === "development") {
 // Body parser
 app.use(express.json());
 
-app.get("/api/v1", (req, res) => {
-  res.send("API is running...");
-});
-
 // Mount routers
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/auth", authRoutes);
@@ -65,6 +61,19 @@ const limiter = rateLimit({
 // Set static folder,so we can go to any domain and do  /our image name and access image in browser
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
+// setting up production mode
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/api/v1", (req, res) => {
+    res.send("API is running...");
+  });
+}
 
 // Not Found & Error Handler middleware
 app.use(notFound);

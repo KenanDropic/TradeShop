@@ -16,6 +16,7 @@ import {
 } from "../features/cart/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
 import Message from "../components/Message";
+import HelmetM from "../components/HelmetM";
 
 const CartS = () => {
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ const CartS = () => {
 
   return (
     <Row>
+      <HelmetM title="Korpa" />
       <Col xxl={8} xl={9} lg={8} md={8} sm={12} xs={12} className="mb-5">
         <h1>Korpa za kupovinu</h1>
         {cartItems.length === 0 ? (

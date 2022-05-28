@@ -41,17 +41,6 @@ const LoginS = () => {
     // eslint-disable-next-line
   }, [user]);
 
-  // // login user
-  // useEffect(() => {
-  //   if (isLogged) {
-  //     //ako je korisnik logovan i isShipping je true,proslijedi ga na shipping ekran,inače proslijedi ga na profil.
-  //     if (isShippingS) {
-  //       return navigate("/shipping");
-  //     }
-  //     navigate("/profile");
-  //   }
-  // }, [isLogged, navigate, isShippingS]);
-
   return loading ? (
     <Loader />
   ) : error ? (
