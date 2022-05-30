@@ -30,7 +30,10 @@ export const registerUser = asyncHandler(async (req, res, next) => {
   const verificationToken = user.generateVerificationToken();
 
   // frontend url. When user hits this url,we will make request from frontend to backend url(/api/v1/auth/confirmEmail?token=...) to confirm email.
-  const url = `${req.protocol}://localhost:3000/confirmEmail?token=${verificationToken}`;
+  const url = `${req.protocol}://${req.get(
+    "host"
+  )}/confirmEmail?token=${verificationToken}`; // - prod mode
+  // const url = `${req.protocol}://localhost:3000/confirmEmail?token=${verificationToken}`; - dev mode
 
   user.save({ validateBeforeSave: false });
 

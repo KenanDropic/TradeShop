@@ -42,7 +42,8 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'", "http://localhost:3000/"],
-        scriptSrc: ["'self'", "https://www.paypal.com/sdk/js"],
+        scriptSrc: ["'self'", "https://www.paypal.com/sdk/js?client-id"],
+        srciptSrcElem: ["'self'", "https://www.paypal.com/sdk/js?client-id"],
         connectSrc: ["'self'", "http://localhost:3000/"],
       },
     },
