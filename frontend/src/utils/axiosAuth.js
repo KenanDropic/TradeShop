@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const axiosAuth = axios.create({
-  baseURL: "http://localhost:3000/api/v1",
+  baseURL: "",
+  // Produciton Mode: https://tradeshop-mern.herokuapp.com
+  // Development Mode: http://localhost:3000/api/v1
   headers: {
     "Content-Type": "application/json",
   },

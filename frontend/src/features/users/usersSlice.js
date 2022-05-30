@@ -56,7 +56,7 @@ export const getCurrentUser = createAsyncThunk(
     try {
       const {
         data: { user },
-      } = await axiosAuth.get("/auth/profile");
+      } = await axiosAuth.get("/api/v1/auth/profile");
       return user;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
@@ -71,7 +71,7 @@ export const updateUserDetails = createAsyncThunk(
     try {
       const {
         data: { updatedUser },
-      } = await axiosAuth.put("/auth/profile", updateInfo);
+      } = await axiosAuth.put("/api/v1/auth/profile", updateInfo);
       return updatedUser;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));

@@ -10,6 +10,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import hpp from "hpp";
 import xss from "xss-clean";
+import cors from "cors";
 
 // Load env variables
 dotenv.config();
@@ -35,6 +36,28 @@ if (process.env.NODE_ENV === "development") {
 // Body parser
 app.use(express.json());
 
+app.use(mongoSanitize());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'", "http://localhost:3000/"],
+        connectSrc: ["'self'", "http://localhost:3000/"],
+      },
+    },
+  })
+);
+app.use(helmet());
+app.use(xss());
+app.use(hpp());
+
+app.use(cors());
+
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 100,
+});
+
 // Mount routers
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/auth", authRoutes);
@@ -47,16 +70,6 @@ app.use("/api/v1/upload", uploadRoutes);
 app.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
-
-app.use(mongoSanitize());
-app.use(helmet());
-app.use(xss());
-app.use(hpp());
-
-const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 mins
-  max: 100,
-});
 
 // Set static folder,so we can go to any domain and do  /our image name and access image in browser
 const __dirname = path.resolve();

@@ -17,7 +17,7 @@ export const getProductReviews = createAsyncThunk(
     try {
       const {
         data: { reviews },
-      } = await axiosAuth.get(`/products/${id}/reviews`);
+      } = await axiosAuth.get(`/api/v1/products/${id}/reviews`);
 
       return reviews;
     } catch (error) {
@@ -34,7 +34,7 @@ export const addReview = createAsyncThunk(
       const {
         data: { reviews },
       } = await axiosAuth.post(
-        `/products/${[id, reviewInfo][0]}/reviews`,
+        `/api/v1/products/${[id, reviewInfo][0]}/reviews`,
         [id, reviewInfo][1]
       );
       return reviews;

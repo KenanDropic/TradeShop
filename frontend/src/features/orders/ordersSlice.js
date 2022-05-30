@@ -22,7 +22,7 @@ export const placeOrder = createAsyncThunk(
     try {
       const {
         data: { createdOrder },
-      } = await axiosAuth.post("/orders", orderData);
+      } = await axiosAuth.post("/api/v1/orders", orderData);
       return createdOrder;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
@@ -36,7 +36,7 @@ export const getOrderDetails = createAsyncThunk(
     try {
       const {
         data: { order },
-      } = await axiosAuth.get(`/orders/${id}`);
+      } = await axiosAuth.get(`/api/v1/orders/${id}`);
       return order;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
@@ -52,7 +52,7 @@ export const updateOrderToPaid = createAsyncThunk(
       const {
         data: { updatedOrder },
       } = await axiosAuth.put(
-        `/orders/${[id, paymentResult][0]}`,
+        `/api/v1/orders/${[id, paymentResult][0]}`,
         [id, paymentResult][1]
       );
       return updatedOrder;
@@ -69,7 +69,7 @@ export const getUserOrders = createAsyncThunk(
     try {
       const {
         data: { orders, count },
-      } = await axiosAuth.get(`/auth/${userId}/orders`);
+      } = await axiosAuth.get(`/api/v1/auth/${userId}/orders`);
       return { orders, count };
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
@@ -84,7 +84,7 @@ export const listOrders = createAsyncThunk(
     try {
       const {
         data: { orders },
-      } = await axiosAuth.get("/orders");
+      } = await axiosAuth.get("/api/v1/orders");
 
       return orders;
     } catch (error) {
@@ -100,7 +100,7 @@ export const markOrderAsDelivered = createAsyncThunk(
     try {
       const {
         data: { updatedOrder },
-      } = await axiosAuth.put(`/orders/${id}/delivered`);
+      } = await axiosAuth.put(`/api/v1/orders/${id}/delivered`);
       return updatedOrder;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));

@@ -19,7 +19,7 @@ export const getAllUsers = createAsyncThunk(
   async ([currPage, kyw], thunkAPI) => {
     try {
       let page = [currPage, kyw][0];
-      const { data } = await axiosAuth.get(`/users?${page}`);
+      const { data } = await axiosAuth.get(`/api/v1/users?${page}`);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
@@ -32,7 +32,7 @@ export const deleteUser = createAsyncThunk(
   "users/delete",
   async (id, thunkAPI) => {
     try {
-      await axiosAuth.delete(`/users/${id}`);
+      await axiosAuth.delete(`/api/v1/users/${id}`);
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
     }
@@ -46,7 +46,7 @@ export const getSingleUser = createAsyncThunk(
     try {
       const {
         data: { user },
-      } = await axiosAuth.get(`/users/${id}`);
+      } = await axiosAuth.get(`/api/v1/users/${id}`);
 
       return user;
     } catch (error) {
@@ -62,8 +62,10 @@ export const updateUser = createAsyncThunk(
     try {
       const {
         data: { updatedUser },
-      } = await axiosAuth.put(`/users/${[id, reqData][0]}`, [id, reqData][1]);
-
+      } = await axiosAuth.put(
+        `/api/v1/users/${[id, reqData][0]}`,
+        [id, reqData][1]
+      );
       return updatedUser;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));

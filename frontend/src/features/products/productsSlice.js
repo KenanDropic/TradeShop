@@ -56,7 +56,7 @@ export const createProduct = createAsyncThunk(
     try {
       const {
         data: { product },
-      } = await axiosAuth.post(`/products`, productInfo);
+      } = await axiosAuth.post(`/api/v1/products`, productInfo);
       return product;
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
@@ -72,7 +72,7 @@ export const editProduct = createAsyncThunk(
       const {
         data: { updatedProduct },
       } = await axiosAuth.put(
-        `/products/${[id, productInfo][0]}`,
+        `/api/v1/products/${[id, productInfo][0]}`,
         [id, productInfo][1]
       );
       return updatedProduct;
@@ -87,7 +87,7 @@ export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
   async (id, thunkAPI) => {
     try {
-      await axiosAuth.delete(`/products/${id}`);
+      await axiosAuth.delete(`/api/v1/products/${id}`);
     } catch (error) {
       return thunkAPI.rejectWithValue(errorMessage(error));
     }
