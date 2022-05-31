@@ -4,6 +4,11 @@
 
 ---
 
+### Aplikacija postavljena na Heroku platformi
+### Link - [TradeShop](https://tradeshop-mern.herokuapp.com/)
+
+---
+
 ## Karakteristike
 
 - Implementacija trgovinske korpe
