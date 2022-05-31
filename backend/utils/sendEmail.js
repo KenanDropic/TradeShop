@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 const sendEmail = async (options) => {
   // create reusable transporter object using the default SMTP transport
   const transporter = nodemailer.createTransport({
+    host: "tradeshop-mern.herokuapp.com",
     service: "hotmail",
     auth: {
       user: process.env.SMTP_EMAIL,

@@ -118,7 +118,6 @@ const usersSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.isLogged = false;
-        state.token = "";
         state.error = action.payload;
       })
       .addCase(registerUser.pending, (state) => {
@@ -135,7 +134,6 @@ const usersSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.isLogged = false;
-        state.token = "";
         state.error = action.payload;
       })
       .addCase(getCurrentUser.pending, (state) => {

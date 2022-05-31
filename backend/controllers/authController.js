@@ -30,9 +30,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
   const verificationToken = user.generateVerificationToken();
 
   // frontend url. When user hits this url,we will make request from frontend to backend url(/api/v1/auth/confirmEmail?token=...) to confirm email.
-  const url = `${req.protocol}://${req.get(
-    "host"
-  )}/confirmEmail?token=${verificationToken}`; // - prod mode
+  const url = `${req.protocol}://tradeshop-mern.herokuapp.com/confirmEmail?token=${verificationToken}`; // - prod mode
   // const url = `${req.protocol}://localhost:3000/confirmEmail?token=${verificationToken}`; - dev mode
 
   user.save({ validateBeforeSave: false });
@@ -45,6 +43,8 @@ export const registerUser = asyncHandler(async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
+
+    console.log(url);
 
     user.confirmEmailToken = undefined;
     user.confirmEmailExpire = undefined;
