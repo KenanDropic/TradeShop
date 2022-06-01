@@ -79,7 +79,7 @@ const LoginS = () => {
                         // eslint-disable-next-line
                         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
                       message:
-                        "Šifra se mora sastojati od najmanje 6 karaktera,velikog i malog slovo,specijalnog karaktera i broja",
+                        "Šifra se mora sastojati od najmanje 8 karaktera,uključujući veliko i malo slovo,specijalni karakter i broj",
                     },
                   })}
                   type={showPassword ? "text" : "password"}
