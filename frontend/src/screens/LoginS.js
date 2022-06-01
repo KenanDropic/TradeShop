@@ -43,10 +43,9 @@ const LoginS = () => {
 
   return loading ? (
     <Loader />
-  ) : error ? (
-    <Message variant="danger">{error}</Message>
   ) : (
     <>
+      {error && <Message variant="danger">{error}</Message>}
       <FormContainer>
         <h1>PRIJAVA</h1>
         <Row>

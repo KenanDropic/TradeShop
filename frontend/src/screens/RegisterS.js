@@ -116,7 +116,7 @@ const RegisterS = () => {
       </Row>
       <Row className="py3 mt-4">
         <Col>
-          Već ste registrovani? <Link to="/register">Prijavite se?</Link>
+          Već ste registrovani? <Link to="/login">Prijavite se?</Link>
         </Col>
       </Row>
     </FormContainer>

@@ -80,9 +80,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   const doesMatch = await user.matchPasswords(password);
 
   if (!doesMatch) {
-    return next(
-      new UnAuthenticatedError("Not authorized to access this route")
-    );
+    return next(new UnAuthenticatedError("Invalid credentials"));
   }
 
   sendTokenResponse(user, 200, res);

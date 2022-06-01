@@ -57,7 +57,7 @@ const ProfileS = () => {
       ) : (
         <>
           <HelmetM title={user?.name} />
-          <Col sm="3" md="3" xs="3" lg="3" xl="3">
+          <Col xs="12" sm="12" md="3" lg="3" xl="3">
             <h2>Profil Korisnika - {user?.name}</h2>
             <Row>
               <Form onSubmit={handleSubmit(onSubmit)}>
@@ -102,7 +102,7 @@ const ProfileS = () => {
               </Form>
             </Row>
           </Col>
-          <Col sm="9" md="9" xs="9" lg="9" xl="9">
+          <Col md="9" lg="9" xl="9">
             <h2 style={{ textAlign: "right" }}>Vaše narudžbe</h2>
             {orders?.length === 0 ? (
               <Message variant="info">Trenutno nemate narudžbi</Message>
