@@ -63,7 +63,7 @@ const Reviews = ({ productId }) => {
         </Row>
       )}
 
-      <ListGroup.Item>
+      <ListGroup.Item className="mt-2">
         <h2 className="mb-1 p-2">Ostavite recenziju</h2>
         {error && <Message variant="danger">{error}</Message>}
         {user !== null ? (

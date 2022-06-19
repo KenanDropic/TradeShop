@@ -42,9 +42,8 @@ export const registerUser = asyncHandler(async (req, res, next) => {
       html: `<h4>${user.name},hvala što ste se registrovali na naš sajt.</h4> Kliknite ovdje <a href="${url}"<a/>da potvrdite vaš email.`,
     });
   } catch (error) {
-    console.log(error);
-
-    console.log(url);
+    // console.log(error);
+    // console.log(url);
 
     user.confirmEmailToken = undefined;
     user.confirmEmailExpire = undefined;
