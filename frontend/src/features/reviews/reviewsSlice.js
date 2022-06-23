@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosAuth from "../../utils/axiosAuth";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const initialState = {
   reviews: null,
@@ -17,7 +18,7 @@ export const getProductReviews = createAsyncThunk(
     try {
       const {
         data: { reviews },
-      } = await axiosAuth.get(`/api/v1/products/${id}/reviews`);
+      } = await axios.get(`/api/v1/products/${id}/reviews`);
 
       return reviews;
     } catch (error) {

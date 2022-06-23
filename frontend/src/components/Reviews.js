@@ -41,7 +41,7 @@ const Reviews = ({ productId }) => {
     <>
       <h2 className="mb-2 p-0">Recenzije</h2>
       {reviews === null || reviews.length === 0 ? (
-        <Message variant="info">Prozivod nema recenzija</Message>
+        <Message variant="info">Proizvod nema recenzija</Message>
       ) : loading ? (
         <Loader />
       ) : (
@@ -65,7 +65,7 @@ const Reviews = ({ productId }) => {
 
       <ListGroup.Item className="mt-2">
         <h2 className="mb-1 p-2">Ostavite recenziju</h2>
-        {error && <Message variant="danger">{error}</Message>}
+        {/* {error && <Message variant="danger">{error}</Message>} */}
         {user !== null ? (
           <Form className="my-0 py-0 px-2" onSubmit={handleSubmit(onSubmit)}>
             <Form.Group>
